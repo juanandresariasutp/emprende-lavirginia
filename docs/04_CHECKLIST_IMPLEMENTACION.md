@@ -144,8 +144,8 @@ src/
 └── config/
 ```
 
-- [ ] Crear carpetas necesarias.
-- [ ] Evitar archivos vacíos innecesarios.
+- [x] Crear carpetas necesarias.
+- [x] Evitar archivos vacíos innecesarios.
 
 ### Commit
 
