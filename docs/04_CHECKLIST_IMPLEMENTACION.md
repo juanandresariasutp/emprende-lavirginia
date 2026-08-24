@@ -77,17 +77,17 @@ chore: inicializar proyecto con nextjs y typescript
 
 ## 1.3 Configurar dependencias base
 
-- [ ] Instalar Tailwind CSS si no viene configurado.
-- [ ] Configurar shadcn/ui.
-- [ ] Instalar Supabase Client.
-- [ ] Instalar Leaflet.
-- [ ] Instalar tipos necesarios.
+- [x] Instalar Tailwind CSS si no viene configurado.
+- [x] Configurar shadcn/ui.
+- [x] Instalar Supabase Client.
+- [x] Instalar Leaflet.
+- [x] Instalar tipos necesarios.
 - [ ] Instalar librería de QR cuando se requiera.
 
 ### Validación
 
-- [ ] El proyecto compila.
-- [ ] No existen dependencias innecesarias.
+- [x] El proyecto compila.
+- [x] No existen dependencias innecesarias.
 
 ### Commit
 
