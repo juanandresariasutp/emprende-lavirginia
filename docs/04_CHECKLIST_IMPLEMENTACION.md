@@ -531,6 +531,9 @@ product_view
 promotion_view
 ```
 
+- [x] Crear migración.
+- [x] Validar tipos y preparar índices para reportes.
+
 ### Commit
 
 ```bash
