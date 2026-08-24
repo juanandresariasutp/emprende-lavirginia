@@ -350,6 +350,9 @@ rejected
 suspended
 ```
 
+- [x] Crear migración.
+- [x] Agregar restricciones e índices necesarios.
+
 ### Commit
 
 ```bash
