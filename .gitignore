@@ -1,5 +1,12 @@
 # Dependencies
 node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # Next.js
 .next/
@@ -29,6 +36,7 @@ coverage/
 .idea/
 .vscode/
 *.swp
+*.pem
 
 # Vercel
 .vercel/

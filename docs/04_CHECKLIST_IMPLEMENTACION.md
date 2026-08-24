@@ -48,11 +48,11 @@ docs: agregar documentación inicial del proyecto
 
 ## 1.2 Inicializar Next.js
 
-- [ ] Crear proyecto con Next.js.
-- [ ] Activar TypeScript.
-- [ ] Utilizar App Router.
-- [ ] Configurar carpeta `src/`.
-- [ ] Confirmar que el proyecto ejecuta correctamente.
+- [x] Crear proyecto con Next.js.
+- [x] Activar TypeScript.
+- [x] Utilizar App Router.
+- [x] Configurar carpeta `src/`.
+- [x] Confirmar que el proyecto ejecuta correctamente.
 
 ### Validación
 
@@ -64,8 +64,8 @@ npm run dev
 
 Comprobar que:
 
-- [ ] La aplicación abre localmente.
-- [ ] No existen errores de compilación.
+- [x] La aplicación abre localmente.
+- [x] No existen errores de compilación.
 
 ### Commit
 
