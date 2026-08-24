@@ -178,11 +178,11 @@ feat(ui): crear layout global de la aplicación
 
 ## 2.3 Crear Header
 
-- [ ] Crear componente Header.
-- [ ] Agregar logo temporal.
-- [ ] Agregar navegación principal.
-- [ ] Preparar menú móvil.
-- [ ] Hacerlo responsive.
+- [x] Crear componente Header.
+- [x] Agregar logo temporal.
+- [x] Agregar navegación principal.
+- [x] Preparar menú móvil.
+- [x] Hacerlo responsive.
 
 ### Commit
 
