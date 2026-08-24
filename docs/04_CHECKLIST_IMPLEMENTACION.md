@@ -253,15 +253,15 @@ chore: configurar variables de entorno
 
 ## 3.3 Configurar cliente Supabase
 
-- [ ] Crear cliente para navegador.
-- [ ] Crear cliente para servidor.
-- [ ] Separar correctamente Server y Client Components.
-- [ ] Evitar exponer secretos.
+- [x] Crear cliente para navegador.
+- [x] Crear cliente para servidor.
+- [x] Separar correctamente Server y Client Components.
+- [x] Evitar exponer secretos.
 
 ### Validación
 
-- [ ] La conexión funciona.
-- [ ] No aparecen claves privadas en el bundle.
+- [x] La conexión funciona.
+- [x] No aparecen claves privadas en el bundle.
 
 ### Commit
 
