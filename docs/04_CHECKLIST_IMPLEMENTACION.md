@@ -157,16 +157,16 @@ chore: crear estructura modular inicial
 
 ## 2.2 Configurar layout global
 
-- [ ] Crear layout principal.
-- [ ] Configurar metadata global.
-- [ ] Definir idioma del documento.
-- [ ] Definir estilos base.
-- [ ] Preparar estructura responsive.
+- [x] Crear layout principal.
+- [x] Configurar metadata global.
+- [x] Definir idioma del documento.
+- [x] Definir estilos base.
+- [x] Preparar estructura responsive.
 
 ### Validación
 
-- [ ] El layout se aplica a todas las páginas.
-- [ ] No hay errores de hidratación.
+- [x] El layout se aplica a todas las páginas.
+- [x] No hay errores de hidratación.
 
 ### Commit
 
