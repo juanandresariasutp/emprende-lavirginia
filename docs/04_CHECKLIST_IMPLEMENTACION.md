@@ -479,11 +479,11 @@ business_hours
 
 Debe permitir:
 
-- [ ] Día de la semana.
-- [ ] Hora de apertura.
-- [ ] Hora de cierre.
-- [ ] Día cerrado.
-- [ ] Más de un rango horario si se requiere posteriormente.
+- [x] Día de la semana.
+- [x] Hora de apertura.
+- [x] Hora de cierre.
+- [x] Día cerrado.
+- [x] Más de un rango horario si se requiere posteriormente.
 
 ### Commit
 
