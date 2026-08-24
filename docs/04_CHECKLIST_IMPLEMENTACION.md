@@ -370,9 +370,9 @@ categories
 business_categories
 ```
 
-- [ ] Permitir categoría principal.
-- [ ] Permitir categorías secundarias.
-- [ ] Evitar duplicados.
+- [x] Permitir categoría principal.
+- [x] Permitir categorías secundarias.
+- [x] Evitar duplicados.
 
 ### Commit
 
