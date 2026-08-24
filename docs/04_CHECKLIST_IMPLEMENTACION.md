@@ -546,9 +546,9 @@ feat(database): crear eventos de analítica
 
 ## 5.1 Activar RLS
 
-- [ ] Activar RLS en tablas sensibles.
-- [ ] Revisar qué tablas serán públicas.
-- [ ] No permitir escrituras anónimas no justificadas.
+- [x] Activar RLS en tablas sensibles.
+- [x] Revisar qué tablas serán públicas.
+- [x] No permitir escrituras anónimas no justificadas.
 
 ### Commit
 
