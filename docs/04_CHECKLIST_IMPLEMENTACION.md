@@ -404,6 +404,9 @@ created_at
 updated_at
 ```
 
+- [x] Crear migración.
+- [x] Relacionar productos con negocios y validar sus datos.
+
 ### Commit
 
 ```bash
