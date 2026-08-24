@@ -501,8 +501,8 @@ Crear:
 business_images
 ```
 
-- [ ] Relacionar con negocio.
-- [ ] Diferenciar logo, portada y galería si es necesario.
+- [x] Relacionar con negocio.
+- [x] Diferenciar logo, portada y galería si es necesario.
 
 ### Commit
 
