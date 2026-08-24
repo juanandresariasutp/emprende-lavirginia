@@ -211,11 +211,11 @@ feat(ui): crear footer de la plataforma
 
 ## 3.1 Crear proyecto Supabase
 
-- [ ] Crear proyecto en Supabase.
-- [ ] Guardar URL pública.
-- [ ] Guardar publishable key.
-- [ ] No publicar service role key.
-- [ ] Documentar nombre del proyecto.
+- [x] Crear proyecto en Supabase.
+- [x] Guardar URL pública.
+- [x] Guardar publishable key.
+- [x] No publicar service role key.
+- [x] Documentar nombre del proyecto.
 
 ### Commit
 
@@ -236,12 +236,12 @@ Ejemplo:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 ```
 
-- [ ] Agregar `.env.local` a `.gitignore`.
-- [ ] Mantener `.env.example` sin secretos.
+- [x] Agregar `.env.local` a `.gitignore`.
+- [x] Mantener `.env.example` sin secretos.
 
 ### Commit
 
