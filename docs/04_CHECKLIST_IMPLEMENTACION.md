@@ -562,11 +562,11 @@ feat(security): activar rls en tablas principales
 
 Permitir públicamente:
 
-- [ ] Leer negocios aprobados.
-- [ ] Leer productos de negocios aprobados.
-- [ ] Leer servicios.
-- [ ] Leer promociones activas.
-- [ ] Leer categorías.
+- [x] Leer negocios aprobados.
+- [x] Leer productos de negocios aprobados.
+- [x] Leer servicios.
+- [x] Leer promociones activas.
+- [x] Leer categorías.
 
 ### Commit
 
