@@ -580,13 +580,13 @@ feat(security): agregar políticas públicas de lectura
 
 El propietario podrá:
 
-- [ ] Leer sus negocios.
-- [ ] Editar sus negocios.
-- [ ] Gestionar productos propios.
-- [ ] Gestionar servicios propios.
-- [ ] Gestionar promociones propias.
-- [ ] Gestionar imágenes propias.
-- [ ] Gestionar horarios propios.
+- [x] Leer sus negocios.
+- [x] Editar sus negocios.
+- [x] Gestionar productos propios.
+- [x] Gestionar servicios propios.
+- [x] Gestionar promociones propias.
+- [x] Gestionar imágenes propias.
+- [x] Gestionar horarios propios.
 
 ### Commit
 
