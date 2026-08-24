@@ -299,8 +299,8 @@ admin
 superadmin
 ```
 
-- [ ] Crear migración.
-- [ ] Agregar restricciones necesarias.
+- [x] Crear migración.
+- [x] Agregar restricciones necesarias.
 
 ### Commit
 
