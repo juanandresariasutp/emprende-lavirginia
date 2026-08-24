@@ -423,10 +423,10 @@ Crear tabla:
 services
 ```
 
-- [ ] Relacionar con negocio.
-- [ ] Permitir nombre.
-- [ ] Permitir descripción.
-- [ ] Permitir precio opcional.
+- [x] Relacionar con negocio.
+- [x] Permitir nombre.
+- [x] Permitir descripción.
+- [x] Permitir precio opcional.
 
 ### Commit
 
