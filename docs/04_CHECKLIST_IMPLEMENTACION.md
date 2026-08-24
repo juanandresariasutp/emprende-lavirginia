@@ -598,11 +598,11 @@ feat(security): agregar políticas para propietarios
 
 ## 5.4 Políticas de administrador
 
-- [ ] Permitir revisar negocios.
-- [ ] Permitir aprobar.
-- [ ] Permitir rechazar.
-- [ ] Permitir suspender.
-- [ ] Permitir administrar categorías.
+- [x] Permitir revisar negocios.
+- [x] Permitir aprobar.
+- [x] Permitir rechazar.
+- [x] Permitir suspender.
+- [x] Permitir administrar categorías.
 
 ### Commit
 
