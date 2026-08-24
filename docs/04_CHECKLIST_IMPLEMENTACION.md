@@ -616,11 +616,11 @@ feat(security): agregar permisos administrativos
 
 ## 6.1 Registro de propietario
 
-- [ ] Crear página de registro.
-- [ ] Implementar email y contraseña.
-- [ ] Crear perfil después del registro.
-- [ ] Asignar rol `owner`.
-- [ ] Validar campos.
+- [x] Crear página de registro.
+- [x] Implementar email y contraseña.
+- [x] Crear perfil después del registro.
+- [x] Asignar rol `owner`.
+- [x] Validar campos.
 
 ### Commit
 
