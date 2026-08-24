@@ -194,10 +194,10 @@ feat(ui): crear header responsive
 
 ## 2.4 Crear Footer
 
-- [ ] Crear Footer.
-- [ ] Agregar información básica.
-- [ ] Agregar enlaces legales temporales.
-- [ ] Agregar enlaces de navegación.
+- [x] Crear Footer.
+- [x] Agregar información básica.
+- [x] Agregar enlaces legales temporales.
+- [x] Agregar enlaces de navegación.
 
 ### Commit
 
