@@ -99,10 +99,10 @@ build: agregar dependencias base del proyecto
 
 ## 1.4 Configurar ESLint y formato
 
-- [ ] Revisar configuración de ESLint.
-- [ ] Configurar Prettier si se decide utilizar.
-- [ ] Definir reglas básicas de formato.
-- [ ] Evitar conflictos entre ESLint y Prettier.
+- [x] Revisar configuración de ESLint.
+- [x] Configurar Prettier si se decide utilizar.
+- [x] Definir reglas básicas de formato.
+- [x] Evitar conflictos entre ESLint y Prettier.
 
 ### Validación
 
