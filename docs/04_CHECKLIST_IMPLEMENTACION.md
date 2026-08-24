@@ -458,6 +458,9 @@ is_active
 created_at
 ```
 
+- [x] Crear migración.
+- [x] Validar el rango de vigencia y relacionar con negocios.
+
 ### Commit
 
 ```bash
