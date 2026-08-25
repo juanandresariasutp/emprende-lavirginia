@@ -1,20 +1,15 @@
-import { BadgeCheck, MapPin, Store } from "lucide-react";
+import { Store } from "lucide-react";
 import Link from "next/link";
 
+import {
+  BusinessCard,
+  type BusinessCardData,
+} from "@/components/business/business-card";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export type RecentBusiness = {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  address: string | null;
-  is_verified: boolean;
-};
-
 type RecentBusinessesProps = {
-  businesses: RecentBusiness[];
+  businesses: BusinessCardData[];
 };
 
 export function RecentBusinesses({ businesses }: RecentBusinessesProps) {
@@ -36,34 +31,7 @@ export function RecentBusinesses({ businesses }: RecentBusinessesProps) {
       {businesses.length > 0 ? (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {businesses.map((business) => (
-            <article
-              key={business.id}
-              className="border-border bg-card rounded-2xl border p-6 shadow-sm"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <span className="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-xl">
-                  <Store aria-hidden="true" className="size-6" />
-                </span>
-                {business.is_verified ? (
-                  <span className="text-primary flex items-center gap-1 text-xs font-semibold">
-                    <BadgeCheck aria-hidden="true" className="size-4" />
-                    Verificado
-                  </span>
-                ) : null}
-              </div>
-              <h3 className="text-foreground mt-5 text-lg font-semibold text-balance">
-                {business.name}
-              </h3>
-              {business.description ? (
-                <p className="text-muted-foreground mt-2 line-clamp-2 text-sm leading-6">
-                  {business.description}
-                </p>
-              ) : null}
-              <p className="text-muted-foreground mt-4 flex items-start gap-2 text-sm">
-                <MapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
-                {business.address ?? "La Virginia, Risaralda"}
-              </p>
-            </article>
+            <BusinessCard key={business.id} business={business} />
           ))}
         </div>
       ) : (

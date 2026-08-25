@@ -753,12 +753,12 @@ feat(home): mostrar negocios recientes
 
 ## 8.1 Crear BusinessCard
 
-- [ ] Nombre.
-- [ ] Logo.
-- [ ] Categoría.
-- [ ] Ubicación.
-- [ ] Estado abierto/cerrado.
-- [ ] Enlace al perfil.
+- [x] Nombre.
+- [x] Logo.
+- [x] Categoría.
+- [x] Ubicación.
+- [x] Estado abierto/cerrado.
+- [x] Enlace al perfil.
 
 ### Commit
 

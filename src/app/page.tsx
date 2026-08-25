@@ -22,11 +22,10 @@ import {
   ActivePromotions,
   type ActivePromotion,
 } from "@/components/home/active-promotions";
-import {
-  RecentBusinesses,
-  type RecentBusiness,
-} from "@/components/home/recent-businesses";
+import { RecentBusinesses } from "@/components/home/recent-businesses";
+import type { BusinessCardData } from "@/components/business/business-card";
 import { buttonVariants } from "@/components/ui/button";
+import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
@@ -84,7 +83,17 @@ export default async function Home() {
         .limit(3),
       supabase
         .from("businesses")
-        .select("id, name, slug, description, address, is_verified")
+        .select(
+          `
+          id,
+          name,
+          slug,
+          address,
+          business_hours(day_of_week, opens_at, closes_at, is_closed),
+          business_images(storage_path, image_type),
+          business_categories(is_primary, categories(name))
+        `,
+        )
         .eq("status", "approved")
         .order("created_at", { ascending: false })
         .limit(4),
@@ -315,7 +324,30 @@ export default async function Home() {
 
       <ActivePromotions promotions={(promotions ?? []) as ActivePromotion[]} />
 
-      <RecentBusinesses businesses={(businesses ?? []) as RecentBusiness[]} />
+      <RecentBusinesses
+        businesses={(businesses ?? []).map((business) => {
+          const logo = business.business_images.find(
+            (image) => image.image_type === "logo",
+          );
+          const primaryCategory = business.business_categories.find(
+            (category) => category.is_primary,
+          );
+
+          return {
+            id: business.id,
+            name: business.name,
+            slug: business.slug,
+            address: business.address,
+            logoUrl: logo
+              ? supabase.storage
+                  .from("business-logos")
+                  .getPublicUrl(logo.storage_path).data.publicUrl
+              : null,
+            category: primaryCategory?.categories[0]?.name ?? null,
+            isOpen: isBusinessOpenNow(business.business_hours),
+          } satisfies BusinessCardData;
+        })}
+      />
 
       <section className="bg-secondary/55 border-y">
         <div className="page-container grid gap-8 py-12 md:grid-cols-[1fr_auto] md:items-center sm:py-16">
