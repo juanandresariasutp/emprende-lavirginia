@@ -13,6 +13,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { WhatsAppButton } from "@/components/business/whatsapp-button";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
 
@@ -132,6 +133,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
       slug,
       description,
       address,
+      whatsapp,
       business_images(id, storage_path, image_type, alt_text, sort_order),
       business_hours(id, day_of_week, opens_at, closes_at, is_closed),
       business_categories(is_primary, categories(name, slug)),
@@ -232,6 +234,13 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                 <MapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
                 {business.address ?? "La Virginia, Risaralda"}
               </p>
+              {business.whatsapp ? (
+                <WhatsAppButton
+                  businessId={business.id}
+                  businessName={business.name}
+                  phone={business.whatsapp}
+                />
+              ) : null}
             </div>
           </div>
         </section>

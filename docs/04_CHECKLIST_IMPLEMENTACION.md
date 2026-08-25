@@ -815,9 +815,9 @@ feat(seo): agregar metadata dinámica a negocios
 
 ## 8.4 Botón de WhatsApp
 
-- [ ] Crear enlace.
-- [ ] Generar mensaje predeterminado.
-- [ ] Registrar clic.
+- [x] Crear enlace.
+- [x] Generar mensaje predeterminado.
+- [x] Registrar clic.
 
 ### Commit
 
