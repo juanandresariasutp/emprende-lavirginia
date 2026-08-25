@@ -6,7 +6,9 @@ import {
   createBusiness,
   type CreateBusinessState,
 } from "@/app/dashboard/negocios/nuevo/actions";
+import { updateBusiness } from "@/app/dashboard/negocios/[id]/editar/actions";
 import { Button } from "@/components/ui/button";
+import type { BusinessInput } from "@/lib/business-form";
 
 const inputClassName =
   "border-input bg-background text-foreground placeholder:text-muted-foreground focus:border-ring focus:ring-ring/30 mt-2 h-11 w-full rounded-lg border px-3 text-sm outline-none transition-shadow focus:ring-3 disabled:cursor-not-allowed disabled:opacity-60";
@@ -23,6 +25,7 @@ type FieldProps = {
   step?: string;
   error?: string;
   disabled: boolean;
+  defaultValue?: string | number;
 };
 
 function Field({ name, label, error, disabled, ...props }: FieldProps) {
@@ -49,11 +52,15 @@ function Field({ name, label, error, disabled, ...props }: FieldProps) {
   );
 }
 
-export function CreateBusinessForm() {
-  const [state, formAction, pending] = useActionState(
-    createBusiness,
-    initialState,
-  );
+type CreateBusinessFormProps = {
+  business?: BusinessInput & { id: string };
+};
+
+export function CreateBusinessForm({ business }: CreateBusinessFormProps) {
+  const action = business
+    ? updateBusiness.bind(null, business.id)
+    : createBusiness;
+  const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
     <form action={formAction} className="space-y-6" noValidate>
@@ -63,6 +70,7 @@ export function CreateBusinessForm() {
         placeholder="Ej. Café del Parque"
         maxLength={120}
         required
+        defaultValue={business?.name}
         error={state.fieldErrors?.name}
         disabled={pending}
       />
@@ -86,6 +94,7 @@ export function CreateBusinessForm() {
           className="border-input bg-background text-foreground placeholder:text-muted-foreground focus:border-ring focus:ring-ring/30 mt-2 w-full rounded-lg border px-3 py-2.5 text-sm outline-none focus:ring-3"
           placeholder="Cuenta qué ofrece tu negocio y qué lo hace especial."
           disabled={pending}
+          defaultValue={business?.description ?? undefined}
         />
         {state.fieldErrors?.description ? (
           <p id="description-error" className="text-destructive mt-1.5 text-sm">
@@ -102,6 +111,7 @@ export function CreateBusinessForm() {
             label="Teléfono"
             type="tel"
             maxLength={32}
+            defaultValue={business?.phone ?? undefined}
             error={state.fieldErrors?.phone}
             disabled={pending}
           />
@@ -111,6 +121,7 @@ export function CreateBusinessForm() {
             type="tel"
             maxLength={32}
             placeholder="Ej. +57 300 123 4567"
+            defaultValue={business?.whatsapp ?? undefined}
             error={state.fieldErrors?.whatsapp}
             disabled={pending}
           />
@@ -119,6 +130,7 @@ export function CreateBusinessForm() {
             label="Instagram"
             maxLength={255}
             placeholder="@usuario o enlace"
+            defaultValue={business?.instagram ?? undefined}
             error={state.fieldErrors?.instagram}
             disabled={pending}
           />
@@ -127,6 +139,7 @@ export function CreateBusinessForm() {
             label="Facebook"
             maxLength={255}
             placeholder="Usuario o enlace"
+            defaultValue={business?.facebook ?? undefined}
             error={state.fieldErrors?.facebook}
             disabled={pending}
           />
@@ -138,6 +151,7 @@ export function CreateBusinessForm() {
             type="url"
             maxLength={2048}
             placeholder="https://ejemplo.com"
+            defaultValue={business?.website ?? undefined}
             error={state.fieldErrors?.website}
             disabled={pending}
           />
@@ -152,6 +166,7 @@ export function CreateBusinessForm() {
             label="Dirección"
             maxLength={300}
             placeholder="Calle, carrera, barrio o referencia"
+            defaultValue={business?.address ?? undefined}
             error={state.fieldErrors?.address}
             disabled={pending}
           />
@@ -163,6 +178,7 @@ export function CreateBusinessForm() {
             type="number"
             step="any"
             placeholder="4.89972"
+            defaultValue={business?.latitude ?? undefined}
             error={state.fieldErrors?.latitude}
             disabled={pending}
           />
@@ -172,6 +188,7 @@ export function CreateBusinessForm() {
             type="number"
             step="any"
             placeholder="-75.8825"
+            defaultValue={business?.longitude ?? undefined}
             error={state.fieldErrors?.longitude}
             disabled={pending}
           />
@@ -181,6 +198,15 @@ export function CreateBusinessForm() {
           mapa.
         </p>
       </fieldset>
+
+      {state.status === "success" ? (
+        <p
+          role="status"
+          className="bg-primary/10 text-primary rounded-lg p-3 text-sm font-medium"
+        >
+          {state.message}
+        </p>
+      ) : null}
 
       {state.status === "error" && !state.fieldErrors ? (
         <p
@@ -193,7 +219,11 @@ export function CreateBusinessForm() {
 
       <div className="border-border flex justify-end border-t pt-5">
         <Button type="submit" size="lg" disabled={pending}>
-          {pending ? "Guardando…" : "Enviar a revisión"}
+          {pending
+            ? "Guardando…"
+            : business
+              ? "Guardar cambios"
+              : "Enviar a revisión"}
         </Button>
       </div>
     </form>

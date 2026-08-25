@@ -1031,9 +1031,9 @@ feat(business): implementar registro de negocio
 
 ## 12.3 Editar negocio
 
-- [ ] Cargar información.
-- [ ] Editar campos.
-- [ ] Guardar cambios.
+- [x] Cargar información.
+- [x] Editar campos.
+- [x] Guardar cambios.
 
 ### Commit
 
