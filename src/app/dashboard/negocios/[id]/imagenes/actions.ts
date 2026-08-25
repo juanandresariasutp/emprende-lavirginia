@@ -15,6 +15,7 @@ const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const acceptedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const logoMaxBytes = 2 * 1024 * 1024;
+const coverMaxBytes = 5 * 1024 * 1024;
 
 async function optimizeLogo(file: File) {
   const source = Buffer.from(await file.arrayBuffer());
@@ -22,6 +23,19 @@ async function optimizeLogo(file: File) {
     .rotate()
     .resize(512, 512, {
       fit: "inside",
+      withoutEnlargement: true,
+    })
+    .webp({ quality: 82, effort: 4 })
+    .toBuffer();
+}
+
+async function optimizeCover(file: File) {
+  const source = Buffer.from(await file.arrayBuffer());
+  return sharp(source, { failOn: "warning" })
+    .rotate()
+    .resize(1600, 900, {
+      fit: "cover",
+      position: "attention",
       withoutEnlargement: true,
     })
     .webp({ quality: 82, effort: 4 })
@@ -115,12 +129,136 @@ export async function uploadBusinessLogo(
     };
   }
 
-  const imageUrl = supabase.storage
+  const publicUrl = supabase.storage
     .from("business-logos")
     .getPublicUrl(storagePath).data.publicUrl;
   revalidatePath("/");
   revalidatePath("/buscar");
   revalidatePath(`/dashboard/negocios/${businessId}/editar`);
   revalidatePath(`/negocios/${business.slug}`);
-  return { status: "success", message: "Logo actualizado.", imageUrl };
+  return {
+    status: "success",
+    message: "Logo actualizado.",
+    imageUrl: `${publicUrl}?v=${Date.now()}`,
+  };
+}
+
+export async function uploadBusinessCover(
+  businessId: string,
+  _previousState: BusinessImageState,
+  formData: FormData,
+): Promise<BusinessImageState> {
+  if (!uuidPattern.test(businessId)) {
+    return { status: "error", message: "El negocio solicitado no es válido." };
+  }
+
+  const file = formData.get("image");
+  if (!(file instanceof File) || file.size === 0) {
+    return { status: "error", message: "Selecciona una imagen de portada." };
+  }
+  if (!acceptedTypes.has(file.type)) {
+    return {
+      status: "error",
+      message: "La portada debe ser una imagen JPG, PNG o WebP.",
+    };
+  }
+  if (file.size > coverMaxBytes) {
+    return {
+      status: "error",
+      message: "La portada no puede pesar más de 5 MB.",
+    };
+  }
+
+  const supabase = await createClient();
+  const { data: claimsData, error: claimsError } =
+    await supabase.auth.getClaims();
+  const ownerId = claimsData?.claims?.sub;
+  if (claimsError || !ownerId) {
+    return { status: "error", message: "Tu sesión venció." };
+  }
+
+  const [{ data: business }, { data: previousCover }] = await Promise.all([
+    supabase
+      .from("businesses")
+      .select("id, slug")
+      .eq("id", businessId)
+      .eq("owner_id", ownerId)
+      .maybeSingle(),
+    supabase
+      .from("business_images")
+      .select("id, storage_path")
+      .eq("business_id", businessId)
+      .eq("image_type", "cover")
+      .maybeSingle(),
+  ]);
+  if (!business) {
+    return {
+      status: "error",
+      message: "No tienes permiso para modificar este negocio.",
+    };
+  }
+
+  let optimized: Buffer;
+  try {
+    optimized = await optimizeCover(file);
+  } catch {
+    return {
+      status: "error",
+      message: "El archivo no contiene una imagen válida.",
+    };
+  }
+
+  const storagePath = `${ownerId}/${businessId}/cover.webp`;
+  const { error: uploadError } = await supabase.storage
+    .from("business-images")
+    .upload(storagePath, optimized, {
+      contentType: "image/webp",
+      cacheControl: "3600",
+      upsert: true,
+    });
+  if (uploadError) {
+    return { status: "error", message: "No fue posible subir la portada." };
+  }
+
+  const reference = {
+    business_id: businessId,
+    storage_path: storagePath,
+    image_type: "cover",
+    alt_text: "Portada del negocio",
+  };
+  const { error: referenceError } = previousCover
+    ? await supabase
+        .from("business_images")
+        .update(reference)
+        .eq("id", previousCover.id)
+        .eq("business_id", businessId)
+    : await supabase.from("business_images").insert(reference);
+  if (referenceError) {
+    if (!previousCover) {
+      await supabase.storage.from("business-images").remove([storagePath]);
+    }
+    return {
+      status: "error",
+      message: "La portada se subió, pero no se pudo guardar su referencia.",
+    };
+  }
+
+  if (previousCover && previousCover.storage_path !== storagePath) {
+    await supabase.storage
+      .from("business-images")
+      .remove([previousCover.storage_path]);
+  }
+
+  const publicUrl = supabase.storage
+    .from("business-images")
+    .getPublicUrl(storagePath).data.publicUrl;
+  revalidatePath("/");
+  revalidatePath("/buscar");
+  revalidatePath(`/dashboard/negocios/${businessId}/editar`);
+  revalidatePath(`/negocios/${business.slug}`);
+  return {
+    status: "success",
+    message: "Portada actualizada.",
+    imageUrl: `${publicUrl}?v=${Date.now()}`,
+  };
 }

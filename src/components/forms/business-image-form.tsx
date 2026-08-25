@@ -5,6 +5,7 @@ import { useActionState } from "react";
 
 import {
   type BusinessImageState,
+  uploadBusinessCover,
   uploadBusinessLogo,
 } from "@/app/dashboard/negocios/[id]/imagenes/actions";
 import { Button } from "@/components/ui/button";
@@ -76,6 +77,76 @@ export function BusinessLogoForm({
         )}
         <Button type="submit" disabled={pending}>
           {pending ? "Procesando…" : "Subir logo"}
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+export function BusinessCoverForm({
+  businessId,
+  currentUrl,
+}: {
+  businessId: string;
+  currentUrl?: string;
+}) {
+  const [state, formAction, pending] = useActionState(
+    uploadBusinessCover.bind(null, businessId),
+    initialState,
+  );
+  const previewUrl = state.imageUrl ?? currentUrl;
+
+  return (
+    <form action={formAction} className="grid gap-4" noValidate>
+      <div className="border-border bg-muted relative aspect-video w-full overflow-hidden rounded-2xl border">
+        {previewUrl ? (
+          <Image
+            src={previewUrl}
+            alt="Portada actual del negocio"
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-cover"
+            unoptimized
+          />
+        ) : (
+          <span className="text-muted-foreground flex h-full items-center justify-center text-sm">
+            Sin portada
+          </span>
+        )}
+      </div>
+      <div>
+        <label className="text-foreground text-sm font-medium" htmlFor="cover">
+          Archivo de portada
+        </label>
+        <input
+          id="cover"
+          name="image"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          required
+          disabled={pending}
+          className="border-input bg-background text-foreground mt-2 block w-full rounded-lg border p-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:font-medium file:text-primary"
+        />
+        <p className="text-muted-foreground mt-2 text-xs">
+          JPG, PNG o WebP, máximo 5 MB. Se recorta a formato 16:9 y se convierte
+          a WebP.
+        </p>
+      </div>
+      <div className="flex items-center justify-between gap-3">
+        {state.status !== "idle" ? (
+          <p
+            role={state.status === "error" ? "alert" : "status"}
+            className={
+              state.status === "error" ? "text-destructive" : "text-primary"
+            }
+          >
+            {state.message}
+          </p>
+        ) : (
+          <span />
+        )}
+        <Button type="submit" disabled={pending}>
+          {pending ? "Procesando…" : "Subir portada"}
         </Button>
       </div>
     </form>

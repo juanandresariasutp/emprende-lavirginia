@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { CreateBusinessForm } from "@/components/forms/create-business-form";
-import { BusinessLogoForm } from "@/components/forms/business-image-form";
+import {
+  BusinessCoverForm,
+  BusinessLogoForm,
+} from "@/components/forms/business-image-form";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -25,7 +28,7 @@ export default async function EditBusinessPage({
 
   if (!ownerId) redirect(`/ingresar?next=/dashboard/negocios/${id}/editar`);
 
-  const [{ data: business }, { data: logo }] = await Promise.all([
+  const [{ data: business }, { data: images }] = await Promise.all([
     supabase
       .from("businesses")
       .select(
@@ -36,13 +39,15 @@ export default async function EditBusinessPage({
       .maybeSingle(),
     supabase
       .from("business_images")
-      .select("storage_path")
+      .select("storage_path, image_type, updated_at")
       .eq("business_id", id)
-      .eq("image_type", "logo")
-      .maybeSingle(),
+      .in("image_type", ["logo", "cover"]),
   ]);
 
   if (!business) notFound();
+
+  const logo = images?.find((image) => image.image_type === "logo");
+  const cover = images?.find((image) => image.image_type === "cover");
 
   return (
     <section>
@@ -81,7 +86,26 @@ export default async function EditBusinessPage({
             logo
               ? supabase.storage
                   .from("business-logos")
-                  .getPublicUrl(logo.storage_path).data.publicUrl
+                  .getPublicUrl(logo.storage_path).data.publicUrl +
+                `?v=${new Date(logo.updated_at).getTime()}`
+              : undefined
+          }
+        />
+      </div>
+
+      <div className="border-border bg-card mt-7 rounded-2xl border p-5 shadow-sm sm:p-7">
+        <h2 className="text-foreground text-xl font-bold">Portada</h2>
+        <p className="text-muted-foreground mt-2 mb-5 text-sm">
+          Destaca tu negocio con una fotografía horizontal de buena calidad.
+        </p>
+        <BusinessCoverForm
+          businessId={id}
+          currentUrl={
+            cover
+              ? supabase.storage
+                  .from("business-images")
+                  .getPublicUrl(cover.storage_path).data.publicUrl +
+                `?v=${new Date(cover.updated_at).getTime()}`
               : undefined
           }
         />

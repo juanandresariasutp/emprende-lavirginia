@@ -1134,8 +1134,8 @@ feat(storage): permitir subir logo del negocio
 
 ## 13.3 Subir portada
 
-- [ ] Optimizar.
-- [ ] Reemplazar imagen anterior correctamente.
+- [x] Optimizar.
+- [x] Reemplazar imagen anterior correctamente.
 
 ### Commit
 
