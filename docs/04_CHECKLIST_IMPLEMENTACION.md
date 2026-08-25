@@ -1045,9 +1045,9 @@ feat(business): permitir editar negocio
 
 ## 12.4 Configurar horarios
 
-- [ ] Crear formulario semanal.
-- [ ] Guardar apertura/cierre.
-- [ ] Manejar días cerrados.
+- [x] Crear formulario semanal.
+- [x] Guardar apertura/cierre.
+- [x] Manejar días cerrados.
 
 ### Commit
 
