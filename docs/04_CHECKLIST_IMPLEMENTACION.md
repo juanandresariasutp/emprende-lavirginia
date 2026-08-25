@@ -1178,9 +1178,9 @@ feat(storage): agregar imágenes de productos
 
 ## 14.1 Crear layout administrativo
 
-- [ ] Sidebar.
-- [ ] Navegación.
-- [ ] Protección por rol.
+- [x] Sidebar.
+- [x] Navegación.
+- [x] Protección por rol.
 
 ### Commit
 
