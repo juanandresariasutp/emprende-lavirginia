@@ -133,6 +133,27 @@
   }
 }
 
+.business-map-popup {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.business-map-popup strong {
+  color: var(--foreground);
+  font-size: 0.9rem;
+}
+
+.business-map-popup p {
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.business-map-popup a {
+  color: var(--primary);
+  font-weight: 700;
+  margin-top: 0.2rem;
+}
+
 @layer utilities {
   .page-container {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;

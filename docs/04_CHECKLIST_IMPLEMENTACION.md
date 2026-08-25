@@ -959,9 +959,9 @@ feat(map): integrar leaflet
 
 ## 11.2 Mostrar negocios en mapa
 
-- [ ] Agregar marcadores.
-- [ ] Mostrar información básica.
-- [ ] Enlazar al perfil.
+- [x] Agregar marcadores.
+- [x] Mostrar información básica.
+- [x] Enlazar al perfil.
 
 ### Commit
 

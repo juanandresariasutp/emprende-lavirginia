@@ -1,14 +1,36 @@
 import { MapPinned } from "lucide-react";
 import type { Metadata } from "next";
 
-import { BusinessMap } from "@/components/maps/business-map";
+import {
+  BusinessMap,
+  type MapBusiness,
+} from "@/components/maps/business-map";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Mapa de negocios",
   description: "Explora en el mapa los negocios de La Virginia, Risaralda.",
 };
 
-export default function MapPage() {
+export default async function MapPage() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("businesses")
+    .select("id, name, slug, address, latitude, longitude")
+    .eq("status", "approved")
+    .not("latitude", "is", null)
+    .not("longitude", "is", null)
+    .order("name", { ascending: true });
+
+  const businesses = (data ?? []).map(
+    (business) =>
+      ({
+        ...business,
+        latitude: Number(business.latitude),
+        longitude: Number(business.longitude),
+      }) satisfies MapBusiness,
+  );
+
   return (
     <div className="page-container py-12 sm:py-16">
       <div className="max-w-3xl">
@@ -26,8 +48,13 @@ export default function MapPage() {
       </div>
 
       <section className="border-border bg-card mt-8 overflow-hidden rounded-2xl border p-1 shadow-sm">
-        <BusinessMap />
+        <BusinessMap businesses={businesses} />
       </section>
+      <p className="text-muted-foreground mt-3 text-sm">
+        {businesses.length === 1
+          ? "1 negocio disponible en el mapa."
+          : `${businesses.length} negocios disponibles en el mapa.`}
+      </p>
     </div>
   );
 }

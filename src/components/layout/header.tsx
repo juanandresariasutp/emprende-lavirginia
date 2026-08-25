@@ -8,6 +8,7 @@ const navigation = [
   { href: "/negocios", label: "Negocios" },
   { href: "/categorias", label: "Categorías" },
   { href: "/promociones", label: "Promociones" },
+  { href: "/mapa", label: "Mapa" },
 ];
 
 const navigationLinkClass =
