@@ -13,7 +13,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { BusinessQrCode } from "@/components/business/business-qr-code";
 import { WhatsAppButton } from "@/components/business/whatsapp-button";
+import { getSiteUrl } from "@/config/supabase";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
 
@@ -164,6 +166,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
     (a, b) => ((a.day_of_week + 6) % 7) - ((b.day_of_week + 6) % 7),
   );
   const isOpen = isBusinessOpenNow(business.business_hours);
+  const publicUrl = `${getSiteUrl()}/negocios/${business.slug}`;
 
   const imageUrl = (
     path: string,
@@ -440,6 +443,12 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                 </p>
               )}
             </section>
+
+            <BusinessQrCode
+              businessName={business.name}
+              slug={business.slug}
+              url={publicUrl}
+            />
           </aside>
         </div>
       </div>

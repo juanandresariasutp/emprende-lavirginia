@@ -829,9 +829,9 @@ feat(business): agregar contacto por whatsapp
 
 ## 8.5 Código QR
 
-- [ ] Generar QR de la URL pública.
-- [ ] Permitir visualizarlo.
-- [ ] Permitir descarga si se decide incluir.
+- [x] Generar QR de la URL pública.
+- [x] Permitir visualizarlo.
+- [x] Permitir descarga si se decide incluir.
 
 ### Commit
 
