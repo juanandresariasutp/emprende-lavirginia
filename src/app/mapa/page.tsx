@@ -1,10 +1,7 @@
 import { MapPinned } from "lucide-react";
 import type { Metadata } from "next";
 
-import {
-  BusinessMap,
-  type MapBusiness,
-} from "@/components/maps/business-map";
+import { BusinessMap, type MapBusiness } from "@/components/maps/business-map";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -42,19 +39,13 @@ export default async function MapPage() {
           Negocios en el mapa
         </h1>
         <p className="text-muted-foreground mt-4 leading-7">
-          Ubica emprendimientos locales y descubre cuáles están más cerca de
-          ti.
+          Ubica emprendimientos locales y descubre cuáles están más cerca de ti.
         </p>
       </div>
 
       <section className="border-border bg-card mt-8 overflow-hidden rounded-2xl border p-1 shadow-sm">
         <BusinessMap businesses={businesses} />
       </section>
-      <p className="text-muted-foreground mt-3 text-sm">
-        {businesses.length === 1
-          ? "1 negocio disponible en el mapa."
-          : `${businesses.length} negocios disponibles en el mapa.`}
-      </p>
     </div>
   );
 }

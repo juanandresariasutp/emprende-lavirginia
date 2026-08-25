@@ -1,9 +1,11 @@
 "use client";
 
-import { LocateFixed, LoaderCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowRight, LocateFixed, LoaderCircle, MapPin } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { calculateDistanceKm, formatDistance } from "@/lib/distance";
 import { cn } from "@/lib/utils";
 
 const LA_VIRGINIA_CENTER: [number, number] = [4.89972, -75.8825];
@@ -51,6 +53,22 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
   const [locationMessage, setLocationMessage] = useState(
     "Comparte tu ubicación para encontrar los negocios más cercanos.",
   );
+  const sortedBusinesses = useMemo(() => {
+    const withDistance = businesses.map((business) => ({
+      ...business,
+      distanceKm: visitorLocation
+        ? calculateDistanceKm(visitorLocation, business)
+        : null,
+    }));
+
+    if (!visitorLocation) return withDistance;
+
+    return withDistance.sort(
+      (first, second) =>
+        (first.distanceKm ?? Number.POSITIVE_INFINITY) -
+        (second.distanceKm ?? Number.POSITIVE_INFINITY),
+    );
+  }, [businesses, visitorLocation]);
 
   useEffect(() => {
     let disposed = false;
@@ -77,10 +95,7 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
       const bounds = leaflet.latLngBounds([]);
 
       businesses.forEach((business) => {
-        const position = leaflet.latLng(
-          business.latitude,
-          business.longitude,
-        );
+        const position = leaflet.latLng(business.latitude, business.longitude);
 
         leaflet
           .circleMarker(position, {
@@ -117,16 +132,13 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
 
       visitorMarkerRef.current?.remove();
       visitorMarkerRef.current = leaflet
-        .circleMarker(
-          [visitorLocation.latitude, visitorLocation.longitude],
-          {
-            radius: 10,
-            color: "#ffffff",
-            weight: 3,
-            fillColor: "#2563eb",
-            fillOpacity: 1,
-          },
-        )
+        .circleMarker([visitorLocation.latitude, visitorLocation.longitude], {
+          radius: 10,
+          color: "#ffffff",
+          weight: 3,
+          fillColor: "#2563eb",
+          fillOpacity: 1,
+        })
         .bindTooltip("Tu ubicación", { permanent: false })
         .addTo(mapRef.current);
 
@@ -188,10 +200,7 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
           type="button"
           onClick={requestVisitorLocation}
           disabled={locationStatus === "requesting"}
-          className={cn(
-            buttonVariants({ variant: "outline" }),
-            "shrink-0",
-          )}
+          className={cn(buttonVariants({ variant: "outline" }), "shrink-0")}
         >
           {locationStatus === "requesting" ? (
             <LoaderCircle aria-hidden="true" className="size-4 animate-spin" />
@@ -208,6 +217,62 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
         aria-label="Mapa de negocios de La Virginia"
         className="h-[32rem] w-full rounded-2xl"
       />
+      <div className="border-border border-t p-3 sm:p-5">
+        <div className="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2 className="text-foreground font-bold">
+              {visitorLocation ? "Más cerca de ti" : "Negocios ubicados"}
+            </h2>
+            <p className="text-muted-foreground mt-1 text-sm">
+              {visitorLocation
+                ? "Ordenados desde tu ubicación actual."
+                : "Activa tu ubicación para ordenarlos por distancia."}
+            </p>
+          </div>
+          <span className="text-muted-foreground text-sm">
+            {sortedBusinesses.length} resultados
+          </span>
+        </div>
+
+        {sortedBusinesses.length > 0 ? (
+          <ol className="mt-4 grid gap-3 md:grid-cols-2">
+            {sortedBusinesses.map((business) => (
+              <li key={business.id}>
+                <Link
+                  href={`/negocios/${business.slug}`}
+                  className="border-border hover:border-primary/40 hover:bg-muted/40 group flex h-full items-center gap-3 rounded-xl border p-4 transition-colors"
+                >
+                  <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-lg">
+                    <MapPin aria-hidden="true" className="size-5" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <strong className="text-foreground block truncate text-sm">
+                      {business.name}
+                    </strong>
+                    <span className="text-muted-foreground mt-1 block truncate text-xs">
+                      {business.address ?? "La Virginia, Risaralda"}
+                    </span>
+                  </span>
+                  {business.distanceKm !== null ? (
+                    <span className="text-primary text-sm font-semibold whitespace-nowrap">
+                      {formatDistance(business.distanceKm)}
+                    </span>
+                  ) : (
+                    <ArrowRight
+                      aria-hidden="true"
+                      className="text-muted-foreground size-4 transition-transform group-hover:translate-x-1"
+                    />
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="border-border text-muted-foreground mt-4 rounded-xl border border-dashed p-6 text-center text-sm">
+            Aún no hay negocios aprobados con coordenadas disponibles.
+          </p>
+        )}
+      </div>
     </div>
   );
 }

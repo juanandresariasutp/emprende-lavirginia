@@ -987,9 +987,9 @@ feat(map): agregar geolocalización del visitante
 
 ## 11.4 Ordenar por distancia
 
-- [ ] Calcular distancia.
-- [ ] Mostrar distancia.
-- [ ] Ordenar resultados.
+- [x] Calcular distancia.
+- [x] Mostrar distancia.
+- [x] Ordenar resultados.
 
 ### Commit
 
