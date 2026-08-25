@@ -1003,9 +1003,9 @@ feat(map): ordenar negocios por distancia
 
 ## 12.1 Crear dashboard
 
-- [ ] Crear navegación.
-- [ ] Mostrar resumen.
-- [ ] Mostrar estado del negocio.
+- [x] Crear navegación.
+- [x] Mostrar resumen.
+- [x] Mostrar estado del negocio.
 
 ### Commit
 
