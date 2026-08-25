@@ -14,6 +14,8 @@ export type EditableProduct = {
   name: string;
   description: string | null;
   price: number;
+  image_url: string | null;
+  updated_at: string;
   is_available: boolean;
 };
 

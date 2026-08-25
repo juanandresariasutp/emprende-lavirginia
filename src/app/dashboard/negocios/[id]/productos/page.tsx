@@ -6,6 +6,7 @@ import {
   ProductForm,
   type EditableProduct,
 } from "@/components/forms/product-form";
+import { ProductImageForm } from "@/components/forms/product-image-form";
 import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -21,7 +22,7 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
   const supabase = await createClient();
   const { data } = await supabase
     .from("products")
-    .select("id, name, description, price, is_available")
+    .select("id, name, description, price, image_url, is_available, updated_at")
     .eq("business_id", id)
     .order("created_at", { ascending: false });
   const products = (data ?? []).map((product) => ({
@@ -51,6 +52,23 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
             className="border-border bg-card rounded-2xl border p-5 shadow-sm"
           >
             <ProductForm businessId={id} product={product} />
+            <div className="border-border mt-5 border-t pt-5">
+              <ProductImageForm
+                key={product.image_url ?? "without-image"}
+                businessId={id}
+                productId={product.id}
+                currentUrl={
+                  product.image_url
+                    ? (/^https?:\/\//i.test(product.image_url)
+                        ? product.image_url
+                        : supabase.storage
+                            .from("products")
+                            .getPublicUrl(product.image_url).data.publicUrl) +
+                      `?v=${new Date(product.updated_at).getTime()}`
+                    : undefined
+                }
+              />
+            </div>
             <div className="border-border mt-4 flex flex-wrap justify-between gap-3 border-t pt-4">
               <form
                 action={toggleProductAvailability.bind(

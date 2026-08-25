@@ -1161,10 +1161,10 @@ feat(storage): crear galería de negocio
 
 ## 13.5 Imágenes de productos
 
-- [ ] Optimizar antes de subir.
-- [ ] Guardar.
-- [ ] Reemplazar.
-- [ ] Eliminar.
+- [x] Optimizar antes de subir.
+- [x] Guardar.
+- [x] Reemplazar.
+- [x] Eliminar.
 
 ### Commit
 
