@@ -1,16 +1,37 @@
 import {
   ArrowRight,
   BadgePercent,
+  GraduationCap,
+  HeartPulse,
+  House,
   Clock3,
   MapPin,
   Search,
+  Shirt,
+  Sparkles,
+  Smartphone,
   Store,
   Tags,
+  Utensils,
+  Wrench,
+  type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
+
+const categoryIcons: Record<string, LucideIcon> = {
+  "comida-bebidas": Utensils,
+  "belleza-cuidado-personal": Sparkles,
+  "servicios-profesionales": Wrench,
+  "moda-accesorios": Shirt,
+  tecnologia: Smartphone,
+  "salud-bienestar": HeartPulse,
+  "hogar-decoracion": House,
+  "educacion-formacion": GraduationCap,
+};
 
 const discoveryOptions = [
   {
@@ -33,7 +54,16 @@ const discoveryOptions = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("id, name, slug, description")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true })
+    .order("name", { ascending: true })
+    .limit(8);
+
   return (
     <>
       <section className="relative isolate overflow-hidden border-b">
@@ -157,45 +187,103 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="page-container py-14 sm:py-20">
-        <div className="max-w-2xl">
-          <p className="text-primary text-sm font-semibold tracking-wide uppercase">
-            Descubre a tu manera
-          </p>
-          <h2 className="text-foreground mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Encuentra una respuesta para cada necesidad
-          </h2>
-          <p className="text-muted-foreground mt-4 leading-7">
-            Empieza por una categoría, revisa las promociones disponibles o
-            consulta qué negocios están atendiendo ahora.
-          </p>
-        </div>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {discoveryOptions.map(({ href, icon: Icon, title, description }) => (
-            <Link
-              key={href}
-              href={href}
-              className="border-border bg-card hover:border-primary/30 hover:shadow-primary/5 group rounded-2xl border p-6 transition-all hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              <span className="bg-primary/10 text-primary flex size-11 items-center justify-center rounded-xl">
-                <Icon aria-hidden="true" className="size-5" />
-              </span>
-              <h3 className="text-foreground mt-5 text-lg font-semibold">
-                {title}
-              </h3>
-              <p className="text-muted-foreground mt-2 text-sm leading-6">
-                {description}
+      {categories && categories.length > 0 ? (
+        <section className="page-container py-14 sm:py-20">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-primary text-sm font-semibold tracking-wide uppercase">
+                Explora lo local
               </p>
-              <span className="text-primary mt-5 inline-flex items-center gap-2 text-sm font-semibold">
-                Explorar
-                <ArrowRight
-                  aria-hidden="true"
-                  className="size-4 transition-transform group-hover:translate-x-1"
-                />
-              </span>
+              <h2 className="text-foreground mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+                Categorías populares
+              </h2>
+              <p className="text-muted-foreground mt-4 leading-7">
+                Encuentra rápidamente los productos y servicios que ofrecen los
+                emprendedores de La Virginia.
+              </p>
+            </div>
+            <Link
+              href="/categorias"
+              className="text-primary inline-flex w-fit items-center gap-2 text-sm font-semibold"
+            >
+              Ver todas las categorías
+              <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
-          ))}
+          </div>
+
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {categories.map((category) => {
+              const Icon = categoryIcons[category.slug] ?? Store;
+
+              return (
+                <Link
+                  key={category.id}
+                  href={`/categorias/${category.slug}`}
+                  className="border-border bg-card hover:border-primary/35 hover:bg-primary/[0.03] group rounded-2xl border p-5 transition-colors sm:p-6"
+                >
+                  <span className="bg-primary/10 text-primary flex size-11 items-center justify-center rounded-xl">
+                    <Icon aria-hidden="true" className="size-5" />
+                  </span>
+                  <h3 className="text-foreground mt-4 font-semibold text-balance">
+                    {category.name}
+                  </h3>
+                  <span className="text-primary mt-3 inline-flex items-center gap-1 text-sm font-medium">
+                    Explorar
+                    <ArrowRight
+                      aria-hidden="true"
+                      className="size-3.5 transition-transform group-hover:translate-x-0.5"
+                    />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
+
+      <section className="bg-muted/35 border-y">
+        <div className="page-container py-14 sm:py-20">
+          <div className="max-w-2xl">
+            <p className="text-primary text-sm font-semibold tracking-wide uppercase">
+              Descubre a tu manera
+            </p>
+            <h2 className="text-foreground mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+              Encuentra una respuesta para cada necesidad
+            </h2>
+            <p className="text-muted-foreground mt-4 leading-7">
+              Empieza por una categoría, revisa las promociones disponibles o
+              consulta qué negocios están atendiendo ahora.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {discoveryOptions.map(
+              ({ href, icon: Icon, title, description }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="border-border bg-card hover:border-primary/30 hover:shadow-primary/5 group rounded-2xl border p-6 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <span className="bg-primary/10 text-primary flex size-11 items-center justify-center rounded-xl">
+                    <Icon aria-hidden="true" className="size-5" />
+                  </span>
+                  <h3 className="text-foreground mt-5 text-lg font-semibold">
+                    {title}
+                  </h3>
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
+                    {description}
+                  </p>
+                  <span className="text-primary mt-5 inline-flex items-center gap-2 text-sm font-semibold">
+                    Explorar
+                    <ArrowRight
+                      aria-hidden="true"
+                      className="size-4 transition-transform group-hover:translate-x-1"
+                    />
+                  </span>
+                </Link>
+              ),
+            )}
+          </div>
         </div>
       </section>
 

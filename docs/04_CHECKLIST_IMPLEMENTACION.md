@@ -712,8 +712,8 @@ feat(home): crear página principal
 
 ## 7.2 Categorías populares
 
-- [ ] Mostrar categorías.
-- [ ] Enlazar a páginas por categoría.
+- [x] Mostrar categorías.
+- [x] Enlazar a páginas por categoría.
 
 ### Commit
 
