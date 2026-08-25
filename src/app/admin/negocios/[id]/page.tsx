@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ApproveBusinessButton } from "@/components/forms/approve-business-button";
 import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,13 @@ const statusLabels: Record<string, string> = {
   suspended: "Suspendido",
 };
 
+const statusStyles: Record<string, string> = {
+  pending: "bg-amber-100 text-amber-800",
+  approved: "bg-emerald-100 text-emerald-800",
+  rejected: "bg-red-100 text-red-800",
+  suspended: "bg-slate-200 text-slate-700",
+};
+
 export default async function BusinessReviewPage({
   params,
 }: BusinessReviewPageProps) {
@@ -44,11 +52,19 @@ export default async function BusinessReviewPage({
     .maybeSingle();
   if (!business) notFound();
 
-  const { data: owner } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("id", business.owner_id)
-    .maybeSingle();
+  const [{ data: owner }, { data: moderationActions }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", business.owner_id)
+      .maybeSingle(),
+    supabase
+      .from("business_moderation_actions")
+      .select("id, action, previous_status, new_status, created_at")
+      .eq("business_id", business.id)
+      .order("created_at", { ascending: false })
+      .limit(10),
+  ]);
   const logo = business.business_images.find(
     (image) => image.image_type === "logo",
   );
@@ -83,7 +99,9 @@ export default async function BusinessReviewPage({
             Propietario: {owner?.full_name || "Sin nombre registrado"}
           </p>
         </div>
-        <span className="bg-amber-100 text-amber-800 rounded-full px-3 py-1 text-sm font-semibold">
+        <span
+          className={`rounded-full px-3 py-1 text-sm font-semibold ${statusStyles[business.status] ?? statusStyles.pending}`}
+        >
           {statusLabels[business.status] ?? business.status}
         </span>
       </div>
@@ -226,6 +244,18 @@ export default async function BusinessReviewPage({
         </div>
 
         <aside className="border-border bg-card h-fit rounded-2xl border p-6 shadow-sm xl:sticky xl:top-24">
+          {business.status === "pending" ? (
+            <div className="border-border mb-6 border-b pb-6">
+              <h2 className="text-foreground text-lg font-bold">
+                Decisión de moderación
+              </h2>
+              <p className="text-muted-foreground mt-2 mb-4 text-sm">
+                Al aprobar, el negocio aparecerá inmediatamente en el directorio
+                público.
+              </p>
+              <ApproveBusinessButton businessId={business.id} />
+            </div>
+          ) : null}
           <h2 className="text-foreground text-lg font-bold">
             Contacto y ubicación
           </h2>
@@ -273,6 +303,29 @@ export default async function BusinessReviewPage({
             >
               <ExternalLink aria-hidden="true" className="size-4" /> Sitio web
             </a>
+          ) : null}
+
+          {(moderationActions ?? []).length > 0 ? (
+            <div className="border-border mt-6 border-t pt-6">
+              <h2 className="text-foreground text-lg font-bold">Historial</h2>
+              <ol className="mt-3 grid gap-3">
+                {(moderationActions ?? []).map((action) => (
+                  <li key={action.id} className="text-sm">
+                    <p className="text-foreground font-medium">
+                      {action.action === "approve"
+                        ? "Negocio aprobado"
+                        : `${action.previous_status} → ${action.new_status}`}
+                    </p>
+                    <p className="text-muted-foreground mt-0.5 text-xs">
+                      {new Intl.DateTimeFormat("es-CO", {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      }).format(new Date(action.created_at))}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            </div>
           ) : null}
         </aside>
       </div>

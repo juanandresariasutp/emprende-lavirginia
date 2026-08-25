@@ -1205,8 +1205,8 @@ feat(admin): listar negocios pendientes
 
 ## 14.3 Aprobar negocio
 
-- [ ] Cambiar estado.
-- [ ] Registrar acción.
+- [x] Cambiar estado.
+- [x] Registrar acción.
 
 ### Commit
 
