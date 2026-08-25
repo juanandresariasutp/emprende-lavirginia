@@ -1147,9 +1147,9 @@ feat(storage): permitir subir portada del negocio
 
 ## 13.4 Galería
 
-- [ ] Subir varias imágenes.
-- [ ] Definir límite.
-- [ ] Eliminar imágenes.
+- [x] Subir varias imágenes.
+- [x] Definir límite.
+- [x] Eliminar imágenes.
 
 ### Commit
 

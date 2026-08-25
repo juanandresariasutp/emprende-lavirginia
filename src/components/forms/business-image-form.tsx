@@ -5,6 +5,7 @@ import { useActionState } from "react";
 
 import {
   type BusinessImageState,
+  uploadBusinessGallery,
   uploadBusinessCover,
   uploadBusinessLogo,
 } from "@/app/dashboard/negocios/[id]/imagenes/actions";
@@ -77,6 +78,63 @@ export function BusinessLogoForm({
         )}
         <Button type="submit" disabled={pending}>
           {pending ? "Procesando…" : "Subir logo"}
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+export function BusinessGalleryUploadForm({
+  businessId,
+  currentCount,
+}: {
+  businessId: string;
+  currentCount: number;
+}) {
+  const [state, formAction, pending] = useActionState(
+    uploadBusinessGallery.bind(null, businessId),
+    initialState,
+  );
+
+  return (
+    <form action={formAction} className="grid gap-4" noValidate>
+      <div>
+        <label
+          className="text-foreground text-sm font-medium"
+          htmlFor="gallery"
+        >
+          Imágenes de la galería
+        </label>
+        <input
+          id="gallery"
+          name="images"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+          required
+          disabled={pending || currentCount >= 6}
+          className="border-input bg-background text-foreground mt-2 block w-full rounded-lg border p-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:font-medium file:text-primary"
+        />
+        <p className="text-muted-foreground mt-2 text-xs">
+          {currentCount} de 6 imágenes. Selecciona hasta 3 por envío; máximo 5
+          MB cada una.
+        </p>
+      </div>
+      <div className="flex items-center justify-between gap-3">
+        {state.status !== "idle" ? (
+          <p
+            role={state.status === "error" ? "alert" : "status"}
+            className={
+              state.status === "error" ? "text-destructive" : "text-primary"
+            }
+          >
+            {state.message}
+          </p>
+        ) : (
+          <span />
+        )}
+        <Button type="submit" disabled={pending || currentCount >= 6}>
+          {pending ? "Procesando…" : "Agregar imágenes"}
         </Button>
       </div>
     </form>

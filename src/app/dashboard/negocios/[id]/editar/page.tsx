@@ -1,13 +1,18 @@
-import { PencilLine } from "lucide-react";
+import { PencilLine, Trash2 } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 
 import { CreateBusinessForm } from "@/components/forms/create-business-form";
 import {
   BusinessCoverForm,
+  BusinessGalleryUploadForm,
   BusinessLogoForm,
 } from "@/components/forms/business-image-form";
+import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
+import { cn } from "@/lib/utils";
+import { deleteBusinessGalleryImage } from "../imagenes/actions";
 
 export const metadata: Metadata = {
   title: "Editar negocio",
@@ -39,15 +44,17 @@ export default async function EditBusinessPage({
       .maybeSingle(),
     supabase
       .from("business_images")
-      .select("storage_path, image_type, updated_at")
+      .select("id, storage_path, image_type, alt_text, sort_order, updated_at")
       .eq("business_id", id)
-      .in("image_type", ["logo", "cover"]),
+      .order("sort_order", { ascending: true }),
   ]);
 
   if (!business) notFound();
 
   const logo = images?.find((image) => image.image_type === "logo");
   const cover = images?.find((image) => image.image_type === "cover");
+  const gallery =
+    images?.filter((image) => image.image_type === "gallery") ?? [];
 
   return (
     <section>
@@ -108,6 +115,55 @@ export default async function EditBusinessPage({
                 `?v=${new Date(cover.updated_at).getTime()}`
               : undefined
           }
+        />
+      </div>
+
+      <div className="border-border bg-card mt-7 rounded-2xl border p-5 shadow-sm sm:p-7">
+        <h2 className="text-foreground text-xl font-bold">Galería</h2>
+        <p className="text-muted-foreground mt-2 mb-5 text-sm">
+          Muestra instalaciones, trabajos y otros detalles de tu negocio.
+        </p>
+        {gallery.length > 0 ? (
+          <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {gallery.map((image) => {
+              const publicUrl =
+                supabase.storage
+                  .from("business-images")
+                  .getPublicUrl(image.storage_path).data.publicUrl +
+                `?v=${new Date(image.updated_at).getTime()}`;
+              return (
+                <article
+                  key={image.id}
+                  className="border-border overflow-hidden rounded-xl border"
+                >
+                  <Image
+                    src={publicUrl}
+                    alt={image.alt_text ?? "Imagen de la galería"}
+                    width={480}
+                    height={360}
+                    className="aspect-4/3 w-full object-cover"
+                    unoptimized
+                  />
+                  <form
+                    action={deleteBusinessGalleryImage.bind(null, id, image.id)}
+                    className="flex justify-end p-2"
+                  >
+                    <button
+                      className={cn(
+                        buttonVariants({ variant: "destructive", size: "sm" }),
+                      )}
+                    >
+                      <Trash2 aria-hidden="true" className="size-4" /> Eliminar
+                    </button>
+                  </form>
+                </article>
+              );
+            })}
+          </div>
+        ) : null}
+        <BusinessGalleryUploadForm
+          businessId={id}
+          currentCount={gallery.length}
         />
       </div>
     </section>
