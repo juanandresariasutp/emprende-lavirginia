@@ -20,6 +20,11 @@ type SearchPageProps = {
   searchParams: Promise<{ q?: string | string[] }>;
 };
 
+type SearchMatch = {
+  business_id: string;
+  rank: number;
+};
+
 function normalizeQuery(value: string | string[] | undefined) {
   const query = Array.isArray(value) ? value[0] : value;
   return query?.trim().replace(/[%_]/g, "").slice(0, 100) ?? "";
@@ -33,47 +38,17 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   let businesses: BusinessCardData[] = [];
 
   if (canSearch) {
-    const pattern = `%${query}%`;
-    const [businessMatches, productMatches, serviceMatches, categoryMatches] =
-      await Promise.all([
-        supabase
-          .from("businesses")
-          .select("id")
-          .eq("status", "approved")
-          .or(`name.ilike.${pattern},description.ilike.${pattern}`),
-        supabase
-          .from("products")
-          .select("business_id")
-          .eq("is_available", true)
-          .or(`name.ilike.${pattern},description.ilike.${pattern}`),
-        supabase
-          .from("services")
-          .select("business_id")
-          .eq("is_available", true)
-          .or(`name.ilike.${pattern},description.ilike.${pattern}`),
-        supabase
-          .from("categories")
-          .select("business_categories(business_id)")
-          .eq("is_active", true)
-          .or(`name.ilike.${pattern},description.ilike.${pattern}`),
-      ]);
-
-    const businessIds = new Set<string>();
-    businessMatches.data?.forEach(({ id }) => businessIds.add(id));
-    productMatches.data?.forEach(({ business_id }) =>
-      businessIds.add(business_id),
-    );
-    serviceMatches.data?.forEach(({ business_id }) =>
-      businessIds.add(business_id),
-    );
-    categoryMatches.data?.forEach(({ business_categories }) =>
-      business_categories.forEach(({ business_id }) =>
-        businessIds.add(business_id),
-      ),
+    const { data } = await supabase.rpc("search_businesses", {
+      p_query: query,
+    });
+    const matches = (data ?? []) as SearchMatch[];
+    const businessIds = matches.map(({ business_id }) => business_id);
+    const relevance = new Map(
+      matches.map(({ business_id, rank }) => [business_id, rank]),
     );
 
-    if (businessIds.size > 0) {
-      const { data } = await supabase
+    if (businessIds.length > 0) {
+      const { data: businessRows } = await supabase
         .from("businesses")
         .select(
           `
@@ -86,32 +61,36 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           business_categories(is_primary, categories(name))
         `,
         )
-        .in("id", [...businessIds])
-        .eq("status", "approved")
-        .order("name", { ascending: true });
+        .in("id", businessIds)
+        .eq("status", "approved");
 
-      businesses = (data ?? []).map((business) => {
-        const logo = business.business_images.find(
-          (image) => image.image_type === "logo",
+      businesses = (businessRows ?? [])
+        .map((business) => {
+          const logo = business.business_images.find(
+            (image) => image.image_type === "logo",
+          );
+          const primaryCategory =
+            business.business_categories.find((item) => item.is_primary) ??
+            business.business_categories[0];
+
+          return {
+            id: business.id,
+            name: business.name,
+            slug: business.slug,
+            address: business.address,
+            logoUrl: logo
+              ? supabase.storage
+                  .from("business-logos")
+                  .getPublicUrl(logo.storage_path).data.publicUrl
+              : null,
+            category: primaryCategory?.categories[0]?.name ?? null,
+            isOpen: isBusinessOpenNow(business.business_hours),
+          };
+        })
+        .sort(
+          (a, b) =>
+            (relevance.get(b.id) ?? 0) - (relevance.get(a.id) ?? 0),
         );
-        const primaryCategory =
-          business.business_categories.find((item) => item.is_primary) ??
-          business.business_categories[0];
-
-        return {
-          id: business.id,
-          name: business.name,
-          slug: business.slug,
-          address: business.address,
-          logoUrl: logo
-            ? supabase.storage
-                .from("business-logos")
-                .getPublicUrl(logo.storage_path).data.publicUrl
-            : null,
-          category: primaryCategory?.categories[0]?.name ?? null,
-          isOpen: isBusinessOpenNow(business.business_hours),
-        };
-      });
     }
   }
 

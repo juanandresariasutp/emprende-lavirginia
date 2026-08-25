@@ -891,9 +891,9 @@ feat(search): implementar búsqueda básica
 
 ## 10.2 PostgreSQL Full Text Search
 
-- [ ] Crear índices.
-- [ ] Configurar búsqueda textual.
-- [ ] Ordenar por relevancia.
+- [x] Crear índices.
+- [x] Configurar búsqueda textual.
+- [x] Ordenar por relevancia.
 
 ### Commit
 
