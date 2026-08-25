@@ -945,9 +945,9 @@ feat(search): agregar filtro de promociones activas
 
 ## 11.1 Integrar Leaflet
 
-- [ ] Crear componente cliente.
-- [ ] Cargar estilos correctamente.
-- [ ] Evitar errores SSR.
+- [x] Crear componente cliente.
+- [x] Cargar estilos correctamente.
+- [x] Evitar errores SSR.
 
 ### Commit
 
