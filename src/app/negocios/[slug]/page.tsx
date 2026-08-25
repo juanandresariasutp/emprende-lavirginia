@@ -19,6 +19,10 @@ import {
   ProductCard,
   type ProductCardData,
 } from "@/components/catalog/product-card";
+import {
+  ServiceCard,
+  type ServiceCardData,
+} from "@/components/catalog/service-card";
 import { getSiteUrl } from "@/config/supabase";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
@@ -90,12 +94,6 @@ export async function generateMetadata({
   };
 }
 
-const moneyFormatter = new Intl.NumberFormat("es-CO", {
-  style: "currency",
-  currency: "COP",
-  maximumFractionDigits: 0,
-});
-
 const promotionDateFormatter = new Intl.DateTimeFormat("es-CO", {
   day: "numeric",
   month: "long",
@@ -144,7 +142,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
       business_hours(id, day_of_week, opens_at, closes_at, is_closed),
       business_categories(is_primary, categories(name, slug)),
       products(id, name, description, price, image_url, is_available),
-      services(id, name, description, price),
+      services(id, name, description, price, is_available),
       promotions(id, title, description, ends_at)
     `,
     )
@@ -333,24 +331,18 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
               {business.services.length > 0 ? (
                 <div className="grid gap-4 sm:grid-cols-2">
                   {business.services.map((service) => (
-                    <article
+                    <ServiceCard
                       key={service.id}
-                      className="bg-card rounded-2xl border p-5"
-                    >
-                      <h3 className="text-foreground font-semibold">
-                        {service.name}
-                      </h3>
-                      {service.description ? (
-                        <p className="text-muted-foreground mt-2 line-clamp-3 text-sm leading-6">
-                          {service.description}
-                        </p>
-                      ) : null}
-                      <p className="text-primary mt-4 font-bold">
-                        {service.price === null
-                          ? "Consultar precio"
-                          : moneyFormatter.format(Number(service.price))}
-                      </p>
-                    </article>
+                      service={
+                        {
+                          id: service.id,
+                          name: service.name,
+                          description: service.description,
+                          price: service.price,
+                          isAvailable: service.is_available,
+                        } satisfies ServiceCardData
+                      }
+                    />
                   ))}
                 </div>
               ) : (

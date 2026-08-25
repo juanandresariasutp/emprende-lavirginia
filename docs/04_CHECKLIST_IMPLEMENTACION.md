@@ -860,9 +860,9 @@ feat(products): mostrar catálogo de productos
 
 ## 9.2 Mostrar servicios
 
-- [ ] Crear ServiceCard.
-- [ ] Mostrar descripción.
-- [ ] Mostrar precio si existe.
+- [x] Crear ServiceCard.
+- [x] Mostrar descripción.
+- [x] Mostrar precio si existe.
 
 ### Commit
 
