@@ -1074,9 +1074,9 @@ feat(products): crear gestión de productos
 
 ## 12.6 Administrar servicios
 
-- [ ] Crear.
-- [ ] Editar.
-- [ ] Eliminar.
+- [x] Crear.
+- [x] Editar.
+- [x] Eliminar.
 
 ### Commit
 
