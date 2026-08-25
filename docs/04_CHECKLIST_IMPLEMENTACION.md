@@ -681,9 +681,9 @@ Proteger:
 /admin
 ```
 
-- [ ] Visitantes no autenticados deben ser redirigidos.
-- [ ] Propietarios no deben entrar a admin.
-- [ ] Admin debe tener permisos correctos.
+- [x] Visitantes no autenticados deben ser redirigidos.
+- [x] Propietarios no deben entrar a admin.
+- [x] Admin debe tener permisos correctos.
 
 ### Commit
 

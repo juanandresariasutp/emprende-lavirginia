@@ -10,7 +10,20 @@ export const metadata: Metadata = {
     "Ingresa a Emprende La Virginia para administrar la información de tu negocio.",
 };
 
-export default function LoginPage() {
+type LoginPageProps = {
+  searchParams: Promise<{ next?: string }>;
+};
+
+function getSafeNextPath(value?: string) {
+  return value?.startsWith("/") && !value.startsWith("//")
+    ? value
+    : "/dashboard";
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const { next } = await searchParams;
+  const nextPath = getSafeNextPath(next);
+
   return (
     <section className="page-container flex flex-1 items-center py-10 sm:py-16">
       <div className="mx-auto grid w-full max-w-5xl overflow-hidden rounded-2xl border bg-card shadow-sm lg:grid-cols-2">
@@ -39,7 +52,7 @@ export default function LoginPage() {
               Usa el correo con el que registraste tu cuenta.
             </p>
             <div className="mt-7">
-              <LoginForm />
+              <LoginForm nextPath={nextPath} />
             </div>
             <p className="text-muted-foreground mt-6 text-center text-sm">
               ¿Aún no tienes una cuenta?{" "}

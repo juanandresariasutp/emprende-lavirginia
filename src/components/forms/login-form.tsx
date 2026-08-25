@@ -9,11 +9,16 @@ import { Button } from "@/components/ui/button";
 const inputClassName =
   "border-input bg-background text-foreground placeholder:text-muted-foreground focus:border-ring focus:ring-ring/30 h-11 w-full rounded-lg border px-3 text-sm outline-none transition-shadow focus:ring-3 disabled:cursor-not-allowed disabled:opacity-60";
 
-export function LoginForm() {
+type LoginFormProps = {
+  nextPath?: string;
+};
+
+export function LoginForm({ nextPath = "/dashboard" }: LoginFormProps) {
   const [state, formAction, pending] = useActionState(login, initialLoginState);
 
   return (
     <form action={formAction} className="space-y-5" noValidate>
+      <input type="hidden" name="next" value={nextPath} />
       <div>
         <label htmlFor="email" className="text-foreground text-sm font-medium">
           Correo electrónico

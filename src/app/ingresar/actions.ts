@@ -17,6 +17,11 @@ export const initialLoginState: LoginState = {
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function getSafeNextPath(value: FormDataEntryValue | null) {
+  const path = String(value ?? "");
+  return path.startsWith("/") && !path.startsWith("//") ? path : "/dashboard";
+}
+
 export async function login(
   _previousState: LoginState,
   formData: FormData,
@@ -25,6 +30,7 @@ export async function login(
     .trim()
     .toLowerCase();
   const password = String(formData.get("password") ?? "");
+  const nextPath = getSafeNextPath(formData.get("next"));
   const fieldErrors: LoginState["fieldErrors"] = {};
 
   if (!emailPattern.test(email) || email.length > 254) {
@@ -62,5 +68,5 @@ export async function login(
     };
   }
 
-  redirect("/dashboard");
+  redirect(nextPath);
 }
