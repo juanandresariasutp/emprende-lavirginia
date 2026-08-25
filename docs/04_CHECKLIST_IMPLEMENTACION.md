@@ -1017,9 +1017,9 @@ feat(business): crear dashboard del propietario
 
 ## 12.2 Crear negocio
 
-- [ ] Crear formulario.
-- [ ] Validar datos.
-- [ ] Guardar como `pending`.
+- [x] Crear formulario.
+- [x] Validar datos.
+- [x] Guardar como `pending`.
 
 ### Commit
 
