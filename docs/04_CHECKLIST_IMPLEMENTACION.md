@@ -973,9 +973,9 @@ feat(map): mostrar negocios en el mapa
 
 ## 11.3 Geolocalización del visitante
 
-- [ ] Solicitar permiso.
-- [ ] Manejar rechazo.
-- [ ] Obtener coordenadas.
+- [x] Solicitar permiso.
+- [x] Manejar rechazo.
+- [x] Obtener coordenadas.
 
 ### Commit
 

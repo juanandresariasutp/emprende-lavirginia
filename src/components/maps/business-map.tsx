@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { LocateFixed, LoaderCircle } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const LA_VIRGINIA_CENTER: [number, number] = [4.89972, -75.8825];
 
@@ -35,6 +39,18 @@ function createBusinessPopup(business: MapBusiness) {
 
 export function BusinessMap({ businesses }: BusinessMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<import("leaflet").Map | null>(null);
+  const visitorMarkerRef = useRef<import("leaflet").CircleMarker | null>(null);
+  const [visitorLocation, setVisitorLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const [locationStatus, setLocationStatus] = useState<
+    "idle" | "requesting" | "success" | "error"
+  >("idle");
+  const [locationMessage, setLocationMessage] = useState(
+    "Comparte tu ubicación para encontrar los negocios más cercanos.",
+  );
 
   useEffect(() => {
     let disposed = false;
@@ -48,6 +64,7 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
           scrollWheelZoom: false,
         })
         .setView(LA_VIRGINIA_CENTER, 14);
+      mapRef.current = map;
 
       leaflet
         .tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -85,15 +102,112 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
 
     return () => {
       disposed = true;
+      mapRef.current = null;
       map?.remove();
     };
   }, [businesses]);
 
+  useEffect(() => {
+    if (!visitorLocation || !mapRef.current) return;
+
+    let disposed = false;
+
+    void import("leaflet").then((leaflet) => {
+      if (disposed || !mapRef.current) return;
+
+      visitorMarkerRef.current?.remove();
+      visitorMarkerRef.current = leaflet
+        .circleMarker(
+          [visitorLocation.latitude, visitorLocation.longitude],
+          {
+            radius: 10,
+            color: "#ffffff",
+            weight: 3,
+            fillColor: "#2563eb",
+            fillOpacity: 1,
+          },
+        )
+        .bindTooltip("Tu ubicación", { permanent: false })
+        .addTo(mapRef.current);
+
+      mapRef.current.flyTo(
+        [visitorLocation.latitude, visitorLocation.longitude],
+        15,
+      );
+    });
+
+    return () => {
+      disposed = true;
+    };
+  }, [visitorLocation]);
+
+  function requestVisitorLocation() {
+    if (!("geolocation" in navigator)) {
+      setLocationStatus("error");
+      setLocationMessage(
+        "Tu navegador no permite obtener la ubicación. Puedes seguir explorando el mapa.",
+      );
+      return;
+    }
+
+    setLocationStatus("requesting");
+    setLocationMessage("Esperando permiso para obtener tu ubicación…");
+
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        setVisitorLocation({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        });
+        setLocationStatus("success");
+        setLocationMessage("Ubicación obtenida correctamente.");
+      },
+      (error) => {
+        setLocationStatus("error");
+        setLocationMessage(
+          error.code === error.PERMISSION_DENIED
+            ? "No compartiste tu ubicación. Puedes seguir usando el mapa normalmente."
+            : "No fue posible obtener tu ubicación. Intenta nuevamente.",
+        );
+      },
+      { enableHighAccuracy: true, timeout: 10_000, maximumAge: 300_000 },
+    );
+  }
+
   return (
-    <div
-      ref={containerRef}
-      aria-label="Mapa de negocios de La Virginia"
-      className="h-[32rem] w-full rounded-2xl"
-    />
+    <div>
+      <div className="flex flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between">
+        <p
+          role="status"
+          aria-live="polite"
+          className={`text-sm ${locationStatus === "error" ? "text-destructive" : "text-muted-foreground"}`}
+        >
+          {locationMessage}
+        </p>
+        <button
+          type="button"
+          onClick={requestVisitorLocation}
+          disabled={locationStatus === "requesting"}
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "shrink-0",
+          )}
+        >
+          {locationStatus === "requesting" ? (
+            <LoaderCircle aria-hidden="true" className="size-4 animate-spin" />
+          ) : (
+            <LocateFixed aria-hidden="true" className="size-4" />
+          )}
+          {locationStatus === "success"
+            ? "Actualizar ubicación"
+            : "Usar mi ubicación"}
+        </button>
+      </div>
+      <div
+        ref={containerRef}
+        aria-label="Mapa de negocios de La Virginia"
+        className="h-[32rem] w-full rounded-2xl"
+      />
+    </div>
   );
 }
