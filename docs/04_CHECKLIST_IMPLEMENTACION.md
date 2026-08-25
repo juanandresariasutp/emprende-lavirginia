@@ -1059,10 +1059,10 @@ feat(business): permitir configurar horarios
 
 ## 12.5 Administrar productos
 
-- [ ] Crear.
-- [ ] Editar.
-- [ ] Eliminar.
-- [ ] Cambiar disponibilidad.
+- [x] Crear.
+- [x] Editar.
+- [x] Eliminar.
+- [x] Cambiar disponibilidad.
 
 ### Commit
 
