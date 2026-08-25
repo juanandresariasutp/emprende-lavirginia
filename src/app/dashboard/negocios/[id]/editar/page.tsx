@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { CreateBusinessForm } from "@/components/forms/create-business-form";
+import { BusinessLogoForm } from "@/components/forms/business-image-form";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -24,14 +25,22 @@ export default async function EditBusinessPage({
 
   if (!ownerId) redirect(`/ingresar?next=/dashboard/negocios/${id}/editar`);
 
-  const { data: business } = await supabase
-    .from("businesses")
-    .select(
-      "id, name, description, phone, whatsapp, instagram, facebook, website, address, latitude, longitude",
-    )
-    .eq("id", id)
-    .eq("owner_id", ownerId)
-    .maybeSingle();
+  const [{ data: business }, { data: logo }] = await Promise.all([
+    supabase
+      .from("businesses")
+      .select(
+        "id, name, description, phone, whatsapp, instagram, facebook, website, address, latitude, longitude",
+      )
+      .eq("id", id)
+      .eq("owner_id", ownerId)
+      .maybeSingle(),
+    supabase
+      .from("business_images")
+      .select("storage_path")
+      .eq("business_id", id)
+      .eq("image_type", "logo")
+      .maybeSingle(),
+  ]);
 
   if (!business) notFound();
 
@@ -58,6 +67,23 @@ export default async function EditBusinessPage({
             longitude:
               business.longitude === null ? null : Number(business.longitude),
           }}
+        />
+      </div>
+
+      <div className="border-border bg-card mt-7 rounded-2xl border p-5 shadow-sm sm:p-7">
+        <h2 className="text-foreground text-xl font-bold">Logo</h2>
+        <p className="text-muted-foreground mt-2 mb-5 text-sm">
+          Usa una imagen cuadrada y legible para identificar tu negocio.
+        </p>
+        <BusinessLogoForm
+          businessId={id}
+          currentUrl={
+            logo
+              ? supabase.storage
+                  .from("business-logos")
+                  .getPublicUrl(logo.storage_path).data.publicUrl
+              : undefined
+          }
         />
       </div>
     </section>

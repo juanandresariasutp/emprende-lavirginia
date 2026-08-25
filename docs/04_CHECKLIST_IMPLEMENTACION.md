@@ -1119,10 +1119,10 @@ feat(storage): configurar buckets de imágenes
 
 ## 13.2 Subir logo
 
-- [ ] Validar tipo.
-- [ ] Validar peso.
-- [ ] Optimizar imagen.
-- [ ] Guardar URL.
+- [x] Validar tipo.
+- [x] Validar peso.
+- [x] Optimizar imagen.
+- [x] Guardar URL.
 
 ### Commit
 
