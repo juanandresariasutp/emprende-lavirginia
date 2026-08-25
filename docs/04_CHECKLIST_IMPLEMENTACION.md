@@ -1192,8 +1192,8 @@ feat(admin): crear panel administrativo
 
 ## 14.2 Revisar negocios pendientes
 
-- [ ] Listar pendientes.
-- [ ] Ver detalle.
+- [x] Listar pendientes.
+- [x] Ver detalle.
 
 ### Commit
 
