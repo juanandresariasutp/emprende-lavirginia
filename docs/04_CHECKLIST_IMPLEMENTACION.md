@@ -646,9 +646,9 @@ feat(auth): implementar inicio de sesión
 
 ## 6.3 Cierre de sesión
 
-- [ ] Implementar logout.
-- [ ] Limpiar sesión.
-- [ ] Redirigir correctamente.
+- [x] Implementar logout.
+- [x] Limpiar sesión.
+- [x] Redirigir correctamente.
 
 ### Commit
 
