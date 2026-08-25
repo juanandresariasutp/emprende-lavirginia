@@ -632,9 +632,9 @@ feat(auth): implementar registro de propietarios
 
 ## 6.2 Inicio de sesión
 
-- [ ] Crear formulario.
-- [ ] Mostrar errores.
-- [ ] Redirigir al dashboard.
+- [x] Crear formulario.
+- [x] Mostrar errores.
+- [x] Redirigir al dashboard.
 
 ### Commit
 
