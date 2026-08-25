@@ -876,10 +876,10 @@ feat(services): mostrar servicios del negocio
 
 ## 10.1 Búsqueda básica
 
-- [ ] Buscar por nombre de negocio.
-- [ ] Buscar productos.
-- [ ] Buscar servicios.
-- [ ] Buscar categorías.
+- [x] Buscar por nombre de negocio.
+- [x] Buscar productos.
+- [x] Buscar servicios.
+- [x] Buscar categorías.
 
 ### Commit
 
