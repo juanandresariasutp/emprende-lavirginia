@@ -15,6 +15,10 @@ import { notFound } from "next/navigation";
 
 import { BusinessQrCode } from "@/components/business/business-qr-code";
 import { WhatsAppButton } from "@/components/business/whatsapp-button";
+import {
+  ProductCard,
+  type ProductCardData,
+} from "@/components/catalog/product-card";
 import { getSiteUrl } from "@/config/supabase";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
@@ -139,7 +143,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
       business_images(id, storage_path, image_type, alt_text, sort_order),
       business_hours(id, day_of_week, opens_at, closes_at, is_closed),
       business_categories(is_primary, categories(name, slug)),
-      products(id, name, description, price),
+      products(id, name, description, price, image_url, is_available),
       services(id, name, description, price),
       promotions(id, title, description, ends_at)
     `,
@@ -172,6 +176,18 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
     path: string,
     bucket: "business-logos" | "business-images",
   ) => supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+  const productImageUrl = (value: string | null) => {
+    if (!value) return null;
+    if (!value.startsWith("http")) {
+      return supabase.storage.from("products").getPublicUrl(value).data
+        .publicUrl;
+    }
+
+    const projectUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    return projectUrl && value.startsWith(`${projectUrl}/storage/`)
+      ? value
+      : null;
+  };
 
   return (
     <main className="pb-16 sm:pb-20">
@@ -287,22 +303,19 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
               {business.products.length > 0 ? (
                 <div className="grid gap-4 sm:grid-cols-2">
                   {business.products.map((product) => (
-                    <article
+                    <ProductCard
                       key={product.id}
-                      className="bg-card rounded-2xl border p-5"
-                    >
-                      <h3 className="text-foreground font-semibold">
-                        {product.name}
-                      </h3>
-                      {product.description ? (
-                        <p className="text-muted-foreground mt-2 line-clamp-3 text-sm leading-6">
-                          {product.description}
-                        </p>
-                      ) : null}
-                      <p className="text-primary mt-4 font-bold">
-                        {moneyFormatter.format(Number(product.price))}
-                      </p>
-                    </article>
+                      product={
+                        {
+                          id: product.id,
+                          name: product.name,
+                          description: product.description,
+                          price: product.price,
+                          imageUrl: productImageUrl(product.image_url),
+                          isAvailable: product.is_available,
+                        } satisfies ProductCardData
+                      }
+                    />
                   ))}
                 </div>
               ) : (

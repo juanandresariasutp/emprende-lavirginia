@@ -845,10 +845,10 @@ feat(business): generar código qr del negocio
 
 ## 9.1 Mostrar productos
 
-- [ ] Crear ProductCard.
-- [ ] Mostrar precio.
-- [ ] Mostrar disponibilidad.
-- [ ] Mostrar imagen optimizada.
+- [x] Crear ProductCard.
+- [x] Mostrar precio.
+- [x] Mostrar disponibilidad.
+- [x] Mostrar imagen optimizada.
 
 ### Commit
 
