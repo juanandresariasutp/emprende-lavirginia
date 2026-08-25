@@ -931,7 +931,7 @@ feat(search): agregar filtro de negocios abiertos
 
 ## 10.5 Filtro con promociones
 
-- [ ] Mostrar solo negocios con promociones activas.
+- [x] Mostrar solo negocios con promociones activas.
 
 ### Commit
 
