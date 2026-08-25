@@ -9,6 +9,7 @@ import {
   Tags,
   Wrench,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -18,6 +19,69 @@ import { createClient } from "@/lib/supabase/server";
 type BusinessPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+const defaultSeoDescription =
+  "Conoce este negocio local, sus productos, servicios y promociones en Emprende La Virginia.";
+
+export async function generateMetadata({
+  params,
+}: BusinessPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: business } = await supabase
+    .from("businesses")
+    .select(
+      "name, description, business_images(storage_path, image_type, alt_text)",
+    )
+    .eq("slug", slug)
+    .eq("status", "approved")
+    .maybeSingle();
+
+  if (!business) {
+    return {
+      title: "Negocio no encontrado",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const description = business.description
+    ? business.description.replace(/\s+/g, " ").trim().slice(0, 160)
+    : defaultSeoDescription;
+  const shareImage =
+    business.business_images.find((image) => image.image_type === "cover") ??
+    business.business_images.find((image) => image.image_type === "logo");
+  const shareImageUrl = shareImage
+    ? supabase.storage
+        .from(
+          shareImage.image_type === "logo"
+            ? "business-logos"
+            : "business-images",
+        )
+        .getPublicUrl(shareImage.storage_path).data.publicUrl
+    : null;
+  const images = shareImageUrl
+    ? [{ url: shareImageUrl, alt: shareImage?.alt_text ?? business.name }]
+    : undefined;
+
+  return {
+    title: business.name,
+    description,
+    openGraph: {
+      type: "website",
+      locale: "es_CO",
+      siteName: "Emprende La Virginia",
+      title: business.name,
+      description,
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: business.name,
+      description,
+      images: shareImageUrl ? [shareImageUrl] : undefined,
+    },
+  };
+}
 
 const moneyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",

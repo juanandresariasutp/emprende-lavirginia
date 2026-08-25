@@ -800,10 +800,10 @@ feat(business): crear perfil público de negocio
 
 ## 8.3 Metadata SEO dinámica
 
-- [ ] Generar title.
-- [ ] Generar description.
-- [ ] Open Graph.
-- [ ] Imagen compartible cuando exista.
+- [x] Generar title.
+- [x] Generar description.
+- [x] Open Graph.
+- [x] Imagen compartible cuando exista.
 
 ### Commit
 
