@@ -14,6 +14,7 @@ import { notFound } from "next/navigation";
 
 import { ApproveBusinessButton } from "@/components/forms/approve-business-button";
 import { RejectBusinessForm } from "@/components/forms/reject-business-form";
+import { SuspendBusinessButton } from "@/components/forms/suspend-business-button";
 import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -256,6 +257,18 @@ export default async function BusinessReviewPage({
               </p>
               <ApproveBusinessButton businessId={business.id} />
               <RejectBusinessForm businessId={business.id} />
+            </div>
+          ) : null}
+          {business.status === "approved" ? (
+            <div className="border-border mb-6 border-b pb-6">
+              <h2 className="text-foreground text-lg font-bold">
+                Suspender publicación
+              </h2>
+              <p className="text-muted-foreground mt-2 mb-4 text-sm">
+                El negocio dejará de aparecer inmediatamente en el directorio
+                público.
+              </p>
+              <SuspendBusinessButton businessId={business.id} />
             </div>
           ) : null}
           <h2 className="text-foreground text-lg font-bold">

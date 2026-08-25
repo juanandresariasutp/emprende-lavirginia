@@ -1231,8 +1231,8 @@ feat(admin): permitir rechazar negocios
 
 ## 14.5 Suspender negocio
 
-- [ ] Cambiar estado.
-- [ ] Ocultar del directorio público.
+- [x] Cambiar estado.
+- [x] Ocultar del directorio público.
 
 ### Commit
 

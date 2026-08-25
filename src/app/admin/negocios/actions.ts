@@ -115,3 +115,49 @@ export async function rejectBusiness(
   revalidatePath(`/negocios/${slug}`);
   return { status: "success", message: "Negocio rechazado." };
 }
+
+export async function suspendBusiness(
+  businessId: string,
+  _previousState: ApprovalState,
+  _formData: FormData,
+): Promise<ApprovalState> {
+  void _previousState;
+  void _formData;
+
+  if (!uuidPattern.test(businessId)) {
+    return { status: "error", message: "El negocio solicitado no es válido." };
+  }
+
+  const supabase = await createClient();
+  const { data: claimsData, error: claimsError } =
+    await supabase.auth.getClaims();
+  const userId = claimsData?.claims?.sub;
+  if (claimsError || !userId) {
+    return { status: "error", message: "Tu sesión venció." };
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .maybeSingle();
+  if (!profile || !["admin", "superadmin"].includes(profile.role)) {
+    return { status: "error", message: "No tienes permisos para suspender." };
+  }
+
+  const { data: slug, error } = await supabase.rpc("suspend_business", {
+    p_business_id: businessId,
+  });
+  if (error || !slug) {
+    return { status: "error", message: "No fue posible suspender el negocio." };
+  }
+
+  revalidatePath("/");
+  revalidatePath("/buscar");
+  revalidatePath("/mapa");
+  revalidatePath("/admin");
+  revalidatePath("/admin/negocios");
+  revalidatePath(`/admin/negocios/${businessId}`);
+  revalidatePath(`/negocios/${slug}`);
+  return { status: "success", message: "Negocio suspendido." };
+}
