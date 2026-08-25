@@ -1,4 +1,4 @@
-import { Building2, LayoutDashboard, ShieldCheck } from "lucide-react";
+import { Building2, LayoutDashboard, ShieldCheck, Tags } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 const adminNavigation = [
   { href: "/admin", label: "Resumen", icon: LayoutDashboard },
   { href: "/admin/negocios", label: "Negocios pendientes", icon: Building2 },
+  { href: "/admin/categorias", label: "Categorías", icon: Tags },
 ];
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {

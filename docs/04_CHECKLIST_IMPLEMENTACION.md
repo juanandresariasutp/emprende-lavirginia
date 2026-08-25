@@ -1244,9 +1244,9 @@ feat(admin): permitir suspender negocios
 
 ## 14.6 Administrar categorías
 
-- [ ] Crear.
-- [ ] Editar.
-- [ ] Eliminar si no rompe relaciones.
+- [x] Crear.
+- [x] Editar.
+- [x] Eliminar si no rompe relaciones.
 
 ### Commit
 
