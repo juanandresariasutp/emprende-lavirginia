@@ -697,10 +697,10 @@ feat(auth): proteger rutas privadas por rol
 
 ## 7.1 Crear Home
 
-- [ ] Crear hero.
-- [ ] Agregar buscador principal.
-- [ ] Agregar secciones base.
-- [ ] Diseñar mobile first.
+- [x] Crear hero.
+- [x] Agregar buscador principal.
+- [x] Agregar secciones base.
+- [x] Diseñar mobile first.
 
 ### Commit
 
