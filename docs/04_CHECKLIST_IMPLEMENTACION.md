@@ -918,8 +918,8 @@ feat(search): agregar filtro por categoría
 
 ## 10.4 Filtro abierto ahora
 
-- [ ] Calcular estado según horario.
-- [ ] Filtrar resultados.
+- [x] Calcular estado según horario.
+- [x] Filtrar resultados.
 
 ### Commit
 

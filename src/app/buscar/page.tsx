@@ -1,4 +1,4 @@
-import { Search, SlidersHorizontal, Store } from "lucide-react";
+import { Clock3, Search, SlidersHorizontal, Store } from "lucide-react";
 import type { Metadata } from "next";
 
 import {
@@ -20,6 +20,7 @@ type SearchPageProps = {
   searchParams: Promise<{
     q?: string | string[];
     categoria?: string | string[];
+    abierto?: string | string[];
   }>;
 };
 
@@ -42,7 +43,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const query = normalizeQuery(params.q);
   const categorySlug = normalizeSlug(params.categoria);
-  const canSearch = query.length >= 2 || categorySlug.length > 0;
+  const openNow = params.abierto === "ahora";
+  const canSearch = query.length >= 2 || categorySlug.length > 0 || openNow;
   const supabase = await createClient();
   const { data: categories } = await supabase
     .from("categories")
@@ -56,6 +58,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     const { data } = await supabase.rpc("search_businesses", {
       p_query: query,
       p_category_slug: categorySlug || null,
+      p_open_now: openNow,
     });
     const matches = (data ?? []) as SearchMatch[];
     const businessIds = matches.map(({ business_id }) => business_id);
@@ -127,10 +130,21 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           action="/buscar"
           method="get"
           role="search"
-          className="border-border bg-card mt-7 grid gap-2 rounded-2xl border p-2 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto_auto]"
+          className="border-border bg-card mt-7 grid gap-2 rounded-2xl border p-2 shadow-sm lg:grid-cols-[minmax(0,1fr)_auto_auto_auto]"
         >
           <label htmlFor="directory-search" className="sr-only">
             Buscar en el directorio
+          </label>
+          <label className="border-border text-foreground flex h-12 cursor-pointer items-center gap-2 rounded-xl border px-3 text-sm whitespace-nowrap">
+            <input
+              type="checkbox"
+              name="abierto"
+              value="ahora"
+              defaultChecked={openNow}
+              className="accent-primary size-4"
+            />
+            <Clock3 aria-hidden="true" className="text-primary size-4" />
+            Abierto ahora
           </label>
           <div className="relative min-w-0 flex-1">
             <Search
@@ -218,7 +232,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </section>
       ) : (
         <p className="text-muted-foreground mt-10 text-center text-sm">
-          Escribe al menos dos caracteres o elige una categoría para comenzar.
+          Escribe al menos dos caracteres o utiliza uno de los filtros para
+          comenzar.
         </p>
       )}
     </main>
