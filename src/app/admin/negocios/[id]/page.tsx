@@ -13,6 +13,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ApproveBusinessButton } from "@/components/forms/approve-business-button";
+import { RejectBusinessForm } from "@/components/forms/reject-business-form";
 import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -60,7 +61,7 @@ export default async function BusinessReviewPage({
       .maybeSingle(),
     supabase
       .from("business_moderation_actions")
-      .select("id, action, previous_status, new_status, created_at")
+      .select("id, action, previous_status, new_status, reason, created_at")
       .eq("business_id", business.id)
       .order("created_at", { ascending: false })
       .limit(10),
@@ -254,6 +255,7 @@ export default async function BusinessReviewPage({
                 público.
               </p>
               <ApproveBusinessButton businessId={business.id} />
+              <RejectBusinessForm businessId={business.id} />
             </div>
           ) : null}
           <h2 className="text-foreground text-lg font-bold">
@@ -322,6 +324,11 @@ export default async function BusinessReviewPage({
                         timeStyle: "short",
                       }).format(new Date(action.created_at))}
                     </p>
+                    {action.reason ? (
+                      <p className="text-muted-foreground mt-1 text-xs leading-5">
+                        {action.reason}
+                      </p>
+                    ) : null}
                   </li>
                 ))}
               </ol>

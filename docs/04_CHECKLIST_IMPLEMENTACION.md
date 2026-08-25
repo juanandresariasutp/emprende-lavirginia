@@ -1218,8 +1218,8 @@ feat(admin): permitir aprobar negocios
 
 ## 14.4 Rechazar negocio
 
-- [ ] Permitir rechazo.
-- [ ] Guardar motivo si se decide.
+- [x] Permitir rechazo.
+- [x] Guardar motivo si se decide.
 
 ### Commit
 
