@@ -778,17 +778,17 @@ Ruta:
 
 Mostrar:
 
-- [ ] Nombre.
-- [ ] Descripción.
-- [ ] Logo.
-- [ ] Portada.
-- [ ] Galería.
-- [ ] Horarios.
-- [ ] Dirección.
-- [ ] Categorías.
-- [ ] Productos.
-- [ ] Servicios.
-- [ ] Promociones.
+- [x] Nombre.
+- [x] Descripción.
+- [x] Logo.
+- [x] Portada.
+- [x] Galería.
+- [x] Horarios.
+- [x] Dirección.
+- [x] Categorías.
+- [x] Productos.
+- [x] Servicios.
+- [x] Promociones.
 
 ### Commit
 
