@@ -18,6 +18,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import {
+  ActivePromotions,
+  type ActivePromotion,
+} from "@/components/home/active-promotions";
 import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -56,13 +60,24 @@ const discoveryOptions = [
 
 export default async function Home() {
   const supabase = await createClient();
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("id, name, slug, description")
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true })
-    .order("name", { ascending: true })
-    .limit(8);
+  const now = new Date().toISOString();
+  const [{ data: categories }, { data: promotions }] = await Promise.all([
+    supabase
+      .from("categories")
+      .select("id, name, slug, description")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .order("name", { ascending: true })
+      .limit(8),
+    supabase
+      .from("promotions")
+      .select("id, title, description, ends_at, businesses(name, slug)")
+      .eq("is_active", true)
+      .lte("starts_at", now)
+      .gt("ends_at", now)
+      .order("ends_at", { ascending: true })
+      .limit(3),
+  ]);
 
   return (
     <>
@@ -286,6 +301,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <ActivePromotions promotions={(promotions ?? []) as ActivePromotion[]} />
 
       <section className="bg-secondary/55 border-y">
         <div className="page-container grid gap-8 py-12 md:grid-cols-[1fr_auto] md:items-center sm:py-16">

@@ -725,9 +725,9 @@ feat(home): mostrar categorías populares
 
 ## 7.3 Promociones activas
 
-- [ ] Consultar promociones vigentes.
-- [ ] Mostrar tarjetas.
-- [ ] Ocultar promociones vencidas.
+- [x] Consultar promociones vigentes.
+- [x] Mostrar tarjetas.
+- [x] Ocultar promociones vencidas.
 
 ### Commit
 
