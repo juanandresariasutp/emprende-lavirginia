@@ -1088,10 +1088,10 @@ feat(services): crear gestión de servicios
 
 ## 12.7 Administrar promociones
 
-- [ ] Crear.
-- [ ] Editar.
-- [ ] Eliminar.
-- [ ] Definir fechas.
+- [x] Crear.
+- [x] Editar.
+- [x] Eliminar.
+- [x] Definir fechas.
 
 ### Commit
 
