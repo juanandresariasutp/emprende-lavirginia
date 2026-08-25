@@ -9,11 +9,6 @@ export type RequestPasswordResetState = {
   emailError?: string;
 };
 
-export const initialRequestPasswordResetState: RequestPasswordResetState = {
-  status: "idle",
-  message: "",
-};
-
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function requestPasswordReset(

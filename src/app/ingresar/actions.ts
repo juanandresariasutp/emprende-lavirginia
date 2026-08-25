@@ -10,11 +10,6 @@ export type LoginState = {
   fieldErrors?: Partial<Record<"email" | "password", string>>;
 };
 
-export const initialLoginState: LoginState = {
-  status: "idle",
-  message: "",
-};
-
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function getSafeNextPath(value: FormDataEntryValue | null) {

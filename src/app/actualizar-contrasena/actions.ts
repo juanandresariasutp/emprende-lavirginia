@@ -8,11 +8,6 @@ export type UpdatePasswordState = {
   fieldErrors?: Partial<Record<"password" | "confirmPassword", string>>;
 };
 
-export const initialUpdatePasswordState: UpdatePasswordState = {
-  status: "idle",
-  message: "",
-};
-
 export async function updatePassword(
   _previousState: UpdatePasswordState,
   formData: FormData,

@@ -4,13 +4,18 @@ import { useActionState } from "react";
 import Link from "next/link";
 
 import {
-  initialUpdatePasswordState,
   updatePassword,
+  type UpdatePasswordState,
 } from "@/app/actualizar-contrasena/actions";
 import { Button } from "@/components/ui/button";
 
 const inputClassName =
   "border-input bg-background text-foreground focus:border-ring focus:ring-ring/30 h-11 w-full rounded-lg border px-3 text-sm outline-none transition-shadow focus:ring-3 disabled:cursor-not-allowed disabled:opacity-60";
+
+const initialUpdatePasswordState: UpdatePasswordState = {
+  status: "idle",
+  message: "",
+};
 
 export function UpdatePasswordForm() {
   const [state, formAction, pending] = useActionState(

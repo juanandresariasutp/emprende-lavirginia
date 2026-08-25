@@ -4,13 +4,18 @@ import { useActionState } from "react";
 import Link from "next/link";
 
 import {
-  initialRequestPasswordResetState,
   requestPasswordReset,
+  type RequestPasswordResetState,
 } from "@/app/recuperar-contrasena/actions";
 import { Button } from "@/components/ui/button";
 
 const inputClassName =
   "border-input bg-background text-foreground placeholder:text-muted-foreground focus:border-ring focus:ring-ring/30 h-11 w-full rounded-lg border px-3 text-sm outline-none transition-shadow focus:ring-3 disabled:cursor-not-allowed disabled:opacity-60";
+
+const initialRequestPasswordResetState: RequestPasswordResetState = {
+  status: "idle",
+  message: "",
+};
 
 export function RequestPasswordResetForm() {
   const [state, formAction, pending] = useActionState(

@@ -14,11 +14,6 @@ export type RegisterOwnerState = {
   >;
 };
 
-export const initialRegisterOwnerState: RegisterOwnerState = {
-  status: "idle",
-  message: "",
-};
-
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function registerOwner(

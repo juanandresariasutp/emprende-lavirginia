@@ -2,14 +2,16 @@
 
 import { useActionState } from "react";
 
-import {
-  initialRegisterOwnerState,
-  registerOwner,
-} from "@/app/registro/actions";
+import { registerOwner, type RegisterOwnerState } from "@/app/registro/actions";
 import { Button } from "@/components/ui/button";
 
 const inputClassName =
   "border-input bg-background text-foreground placeholder:text-muted-foreground focus:border-ring focus:ring-ring/30 h-11 w-full rounded-lg border px-3 text-sm outline-none transition-shadow focus:ring-3 disabled:cursor-not-allowed disabled:opacity-60";
+
+const initialRegisterOwnerState: RegisterOwnerState = {
+  status: "idle",
+  message: "",
+};
 
 export function RegisterOwnerForm() {
   const [state, formAction, pending] = useActionState(
