@@ -660,9 +660,9 @@ feat(auth): implementar cierre de sesión
 
 ## 6.4 Recuperación de contraseña
 
-- [ ] Solicitar correo.
-- [ ] Integrar recuperación de Supabase.
-- [ ] Crear pantalla para nueva contraseña.
+- [x] Solicitar correo.
+- [x] Integrar recuperación de Supabase.
+- [x] Crear pantalla para nueva contraseña.
 
 ### Commit
 

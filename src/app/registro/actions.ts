@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getSiteUrl } from "@/config/supabase";
 
 export type RegisterOwnerState = {
   status: "idle" | "error" | "success";
@@ -63,6 +64,7 @@ export async function registerOwner(
     password,
     options: {
       data: { full_name: fullName },
+      emailRedirectTo: `${getSiteUrl()}/auth/confirm?next=/dashboard`,
     },
   });
 
