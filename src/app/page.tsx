@@ -22,6 +22,10 @@ import {
   ActivePromotions,
   type ActivePromotion,
 } from "@/components/home/active-promotions";
+import {
+  RecentBusinesses,
+  type RecentBusiness,
+} from "@/components/home/recent-businesses";
 import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -61,23 +65,30 @@ const discoveryOptions = [
 export default async function Home() {
   const supabase = await createClient();
   const now = new Date().toISOString();
-  const [{ data: categories }, { data: promotions }] = await Promise.all([
-    supabase
-      .from("categories")
-      .select("id, name, slug, description")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true })
-      .order("name", { ascending: true })
-      .limit(8),
-    supabase
-      .from("promotions")
-      .select("id, title, description, ends_at, businesses(name, slug)")
-      .eq("is_active", true)
-      .lte("starts_at", now)
-      .gt("ends_at", now)
-      .order("ends_at", { ascending: true })
-      .limit(3),
-  ]);
+  const [{ data: categories }, { data: promotions }, { data: businesses }] =
+    await Promise.all([
+      supabase
+        .from("categories")
+        .select("id, name, slug, description")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .order("name", { ascending: true })
+        .limit(8),
+      supabase
+        .from("promotions")
+        .select("id, title, description, ends_at, businesses(name, slug)")
+        .eq("is_active", true)
+        .lte("starts_at", now)
+        .gt("ends_at", now)
+        .order("ends_at", { ascending: true })
+        .limit(3),
+      supabase
+        .from("businesses")
+        .select("id, name, slug, description, address, is_verified")
+        .eq("status", "approved")
+        .order("created_at", { ascending: false })
+        .limit(4),
+    ]);
 
   return (
     <>
@@ -303,6 +314,8 @@ export default async function Home() {
       </section>
 
       <ActivePromotions promotions={(promotions ?? []) as ActivePromotion[]} />
+
+      <RecentBusinesses businesses={(businesses ?? []) as RecentBusiness[]} />
 
       <section className="bg-secondary/55 border-y">
         <div className="page-container grid gap-8 py-12 md:grid-cols-[1fr_auto] md:items-center sm:py-16">

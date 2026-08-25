@@ -739,7 +739,7 @@ feat(home): mostrar promociones activas
 
 ## 7.4 Nuevos negocios
 
-- [ ] Mostrar negocios aprobados recientemente.
+- [x] Mostrar negocios aprobados recientemente.
 
 ### Commit
 
