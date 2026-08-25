@@ -1,4 +1,4 @@
-import { Search, Store } from "lucide-react";
+import { Search, SlidersHorizontal, Store } from "lucide-react";
 import type { Metadata } from "next";
 
 import {
@@ -17,7 +17,10 @@ export const metadata: Metadata = {
 };
 
 type SearchPageProps = {
-  searchParams: Promise<{ q?: string | string[] }>;
+  searchParams: Promise<{
+    q?: string | string[];
+    categoria?: string | string[];
+  }>;
 };
 
 type SearchMatch = {
@@ -30,16 +33,29 @@ function normalizeQuery(value: string | string[] | undefined) {
   return query?.trim().replace(/[%_]/g, "").slice(0, 100) ?? "";
 }
 
+function normalizeSlug(value: string | string[] | undefined) {
+  const slug = Array.isArray(value) ? value[0] : value;
+  return slug?.match(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)?.[0] ?? "";
+}
+
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const query = normalizeQuery(params.q);
-  const canSearch = query.length >= 2;
+  const categorySlug = normalizeSlug(params.categoria);
+  const canSearch = query.length >= 2 || categorySlug.length > 0;
   const supabase = await createClient();
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("name, slug")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true })
+    .order("name", { ascending: true });
   let businesses: BusinessCardData[] = [];
 
   if (canSearch) {
     const { data } = await supabase.rpc("search_businesses", {
       p_query: query,
+      p_category_slug: categorySlug || null,
     });
     const matches = (data ?? []) as SearchMatch[];
     const businessIds = matches.map(({ business_id }) => business_id);
@@ -111,7 +127,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           action="/buscar"
           method="get"
           role="search"
-          className="border-border bg-card mt-7 flex gap-2 rounded-2xl border p-2 shadow-sm"
+          className="border-border bg-card mt-7 grid gap-2 rounded-2xl border p-2 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto_auto]"
         >
           <label htmlFor="directory-search" className="sr-only">
             Buscar en el directorio
@@ -126,15 +142,32 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               name="q"
               type="search"
               defaultValue={query}
-              minLength={2}
               maxLength={100}
-              required
               autoFocus
               autoComplete="off"
               placeholder="Ej. panadería, almuerzos o reparación"
               className="text-foreground placeholder:text-muted-foreground focus:ring-ring/30 h-12 w-full rounded-xl bg-transparent pr-4 pl-11 outline-none focus:ring-3"
             />
           </div>
+          <label className="relative">
+            <span className="sr-only">Filtrar por categoría</span>
+            <SlidersHorizontal
+              aria-hidden="true"
+              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
+            />
+            <select
+              name="categoria"
+              defaultValue={categorySlug}
+              className="border-border bg-background text-foreground focus:ring-ring/30 h-12 w-full appearance-none rounded-xl border pr-8 pl-9 text-sm outline-none focus:ring-3 sm:w-52"
+            >
+              <option value="">Todas las categorías</option>
+              {(categories ?? []).map((category) => (
+                <option key={category.slug} value={category.slug}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             type="submit"
             className={cn(buttonVariants({ size: "lg" }), "h-12 rounded-xl")}
@@ -152,7 +185,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 id="search-results-title"
                 className="text-foreground text-2xl font-bold"
               >
-                Resultados para “{query}”
+                {query ? `Resultados para “${query}”` : "Negocios encontrados"}
               </h2>
               <p className="text-muted-foreground mt-1 text-sm">
                 {businesses.length === 1
@@ -185,7 +218,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </section>
       ) : (
         <p className="text-muted-foreground mt-10 text-center text-sm">
-          Escribe al menos dos caracteres para comenzar la búsqueda.
+          Escribe al menos dos caracteres o elige una categoría para comenzar.
         </p>
       )}
     </main>

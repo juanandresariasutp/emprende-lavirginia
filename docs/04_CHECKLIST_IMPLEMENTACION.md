@@ -905,8 +905,8 @@ feat(search): integrar full text search de postgresql
 
 ## 10.3 Filtro por categoría
 
-- [ ] Crear filtro.
-- [ ] Sincronizar con URL si es conveniente.
+- [x] Crear filtro.
+- [x] Sincronizar con URL si es conveniente.
 
 ### Commit
 
