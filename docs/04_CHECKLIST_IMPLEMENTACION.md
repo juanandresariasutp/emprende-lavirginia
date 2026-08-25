@@ -1105,9 +1105,9 @@ feat(promotions): crear gestión de promociones
 
 ## 13.1 Configurar buckets
 
-- [ ] Crear buckets.
-- [ ] Configurar permisos.
-- [ ] Definir estructura de paths.
+- [x] Crear buckets.
+- [x] Configurar permisos.
+- [x] Definir estructura de paths.
 
 ### Commit
 
