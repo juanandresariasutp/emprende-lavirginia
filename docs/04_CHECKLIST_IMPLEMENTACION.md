@@ -1378,9 +1378,9 @@ refactor(ui): mejorar accesibilidad de la interfaz
 
 ## 18.1 Sitemap
 
-- [ ] Generar sitemap.
-- [ ] Incluir negocios aprobados.
-- [ ] Incluir categorías.
+- [x] Generar sitemap.
+- [x] Incluir negocios aprobados.
+- [x] Incluir categorías.
 
 ### Commit
 
