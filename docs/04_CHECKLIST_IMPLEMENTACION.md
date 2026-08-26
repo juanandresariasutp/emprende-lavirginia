@@ -1392,8 +1392,8 @@ feat(seo): generar sitemap dinámico
 
 ## 18.2 Robots
 
-- [ ] Crear robots.txt.
-- [ ] Bloquear rutas privadas.
+- [x] Crear robots.txt.
+- [x] Bloquear rutas privadas.
 
 ### Commit
 
