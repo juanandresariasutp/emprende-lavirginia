@@ -2,8 +2,8 @@
 
 import { MessageCircle } from "lucide-react";
 
+import { TrackedExternalLink } from "@/components/business/public-analytics";
 import { buttonVariants } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/browser";
 import { cn } from "@/lib/utils";
 
 type WhatsAppButtonProps = {
@@ -30,21 +30,11 @@ export function WhatsAppButton({
 
   if (normalizedPhone.length < 10 || normalizedPhone.length > 15) return null;
 
-  function recordClick() {
-    const supabase = createClient();
-    void supabase.from("business_events").insert({
-      business_id: businessId,
-      event_type: "whatsapp_click",
-      metadata: { source: "public_profile" },
-    });
-  }
-
   return (
-    <a
+    <TrackedExternalLink
       href={`https://wa.me/${normalizedPhone}?text=${message}`}
-      target="_blank"
-      rel="nofollow noopener noreferrer"
-      onClick={recordClick}
+      label={`Escribir por WhatsApp a ${businessName}`}
+      event={{ businessId, eventType: "whatsapp_click" }}
       className={cn(
         buttonVariants({ size: "lg" }),
         "mt-6 w-fit bg-emerald-600 text-white hover:bg-emerald-700",
@@ -52,6 +42,6 @@ export function WhatsAppButton({
     >
       <MessageCircle aria-hidden="true" data-icon="inline-start" />
       Escribir por WhatsApp
-    </a>
+    </TrackedExternalLink>
   );
 }

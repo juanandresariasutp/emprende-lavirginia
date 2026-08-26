@@ -2,6 +2,7 @@ import {
   BadgePercent,
   CalendarClock,
   Clock3,
+  ExternalLink,
   ImageIcon,
   MapPin,
   Package,
@@ -14,6 +15,11 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { BusinessQrCode } from "@/components/business/business-qr-code";
+import {
+  BusinessProfileView,
+  TrackedExternalLink,
+  ViewedItem,
+} from "@/components/business/public-analytics";
 import { WhatsAppButton } from "@/components/business/whatsapp-button";
 import {
   ProductCard,
@@ -24,8 +30,10 @@ import {
   type ServiceCardData,
 } from "@/components/catalog/service-card";
 import { getSiteUrl } from "@/config/supabase";
+import { buttonVariants } from "@/components/ui/button";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
+import { cn } from "@/lib/utils";
 
 type BusinessPageProps = {
   params: Promise<{ slug: string }>;
@@ -138,6 +146,9 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
       description,
       address,
       whatsapp,
+      instagram,
+      latitude,
+      longitude,
       business_images(id, storage_path, image_type, alt_text, sort_order),
       business_hours(id, day_of_week, opens_at, closes_at, is_closed),
       business_categories(is_primary, categories(name, slug)),
@@ -169,6 +180,27 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
   );
   const isOpen = isBusinessOpenNow(business.business_hours);
   const publicUrl = `${getSiteUrl()}/negocios/${business.slug}`;
+  const locationUrl =
+    business.latitude !== null && business.longitude !== null
+      ? `https://www.google.com/maps/search/?api=1&query=${business.latitude},${business.longitude}`
+      : business.address
+        ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.address)}`
+        : null;
+  const instagramUrl = (() => {
+    if (!business.instagram) return null;
+    const value = business.instagram.trim();
+    if (/^[A-Za-z0-9._]{1,30}$/.test(value.replace(/^@/, ""))) {
+      return `https://www.instagram.com/${value.replace(/^@/, "")}/`;
+    }
+    try {
+      const url = new URL(value);
+      return ["instagram.com", "www.instagram.com"].includes(url.hostname)
+        ? url.toString()
+        : null;
+    } catch {
+      return null;
+    }
+  })();
 
   const imageUrl = (
     path: string,
@@ -189,6 +221,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
 
   return (
     <main className="pb-16 sm:pb-20">
+      <BusinessProfileView businessId={business.id} />
       <section className="relative h-56 overflow-hidden bg-gradient-to-br from-primary/20 via-accent/30 to-secondary sm:h-72 lg:h-80">
         {cover ? (
           <Image
@@ -258,6 +291,36 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                   phone={business.whatsapp}
                 />
               ) : null}
+              {locationUrl || instagramUrl ? (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {locationUrl ? (
+                    <TrackedExternalLink
+                      href={locationUrl}
+                      label={`Ver ubicación de ${business.name}`}
+                      event={{
+                        businessId: business.id,
+                        eventType: "location_click",
+                      }}
+                      className={cn(buttonVariants({ variant: "outline" }))}
+                    >
+                      <MapPin aria-hidden="true" /> Ver ubicación
+                    </TrackedExternalLink>
+                  ) : null}
+                  {instagramUrl ? (
+                    <TrackedExternalLink
+                      href={instagramUrl}
+                      label={`Abrir Instagram de ${business.name}`}
+                      event={{
+                        businessId: business.id,
+                        eventType: "instagram_click",
+                      }}
+                      className={cn(buttonVariants({ variant: "outline" }))}
+                    >
+                      <ExternalLink aria-hidden="true" /> Instagram
+                    </TrackedExternalLink>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           </div>
         </section>
@@ -301,19 +364,27 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
               {business.products.length > 0 ? (
                 <div className="grid gap-4 sm:grid-cols-2">
                   {business.products.map((product) => (
-                    <ProductCard
+                    <ViewedItem
                       key={product.id}
-                      product={
-                        {
-                          id: product.id,
-                          name: product.name,
-                          description: product.description,
-                          price: product.price,
-                          imageUrl: productImageUrl(product.image_url),
-                          isAvailable: product.is_available,
-                        } satisfies ProductCardData
-                      }
-                    />
+                      event={{
+                        businessId: business.id,
+                        eventType: "product_view",
+                        productId: product.id,
+                      }}
+                    >
+                      <ProductCard
+                        product={
+                          {
+                            id: product.id,
+                            name: product.name,
+                            description: product.description,
+                            price: product.price,
+                            imageUrl: productImageUrl(product.image_url),
+                            isAvailable: product.is_available,
+                          } satisfies ProductCardData
+                        }
+                      />
+                    </ViewedItem>
                   ))}
                 </div>
               ) : (
@@ -363,26 +434,35 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
               {business.promotions.length > 0 ? (
                 <div className="grid gap-4 sm:grid-cols-2">
                   {business.promotions.map((promotion) => (
-                    <article
+                    <ViewedItem
                       key={promotion.id}
-                      className="bg-secondary/50 rounded-2xl border p-5"
+                      event={{
+                        businessId: business.id,
+                        eventType: "promotion_view",
+                        promotionId: promotion.id,
+                      }}
                     >
-                      <h3 className="text-secondary-foreground font-semibold">
-                        {promotion.title}
-                      </h3>
-                      {promotion.description ? (
-                        <p className="text-muted-foreground mt-2 text-sm leading-6">
-                          {promotion.description}
+                      <article className="bg-secondary/50 rounded-2xl border p-5">
+                        <h3 className="text-secondary-foreground font-semibold">
+                          {promotion.title}
+                        </h3>
+                        {promotion.description ? (
+                          <p className="text-muted-foreground mt-2 text-sm leading-6">
+                            {promotion.description}
+                          </p>
+                        ) : null}
+                        <p className="text-muted-foreground mt-4 flex items-center gap-2 text-xs">
+                          <CalendarClock
+                            aria-hidden="true"
+                            className="size-4"
+                          />
+                          Hasta el{" "}
+                          {promotionDateFormatter.format(
+                            new Date(promotion.ends_at),
+                          )}
                         </p>
-                      ) : null}
-                      <p className="text-muted-foreground mt-4 flex items-center gap-2 text-xs">
-                        <CalendarClock aria-hidden="true" className="size-4" />
-                        Hasta el{" "}
-                        {promotionDateFormatter.format(
-                          new Date(promotion.ends_at),
-                        )}
-                      </p>
-                    </article>
+                      </article>
+                    </ViewedItem>
                   ))}
                 </div>
               ) : (
