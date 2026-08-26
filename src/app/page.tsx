@@ -166,7 +166,7 @@ export default async function Home() {
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
               <Link
                 href="/negocios"
-                className="text-foreground hover:text-primary inline-flex items-center gap-2 font-medium transition-colors"
+                className="text-foreground hover:text-primary focus-visible:ring-ring inline-flex items-center gap-2 rounded-md font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 Ver todos los negocios
                 <ArrowRight aria-hidden="true" className="size-4" />

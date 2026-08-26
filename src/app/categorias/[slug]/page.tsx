@@ -23,10 +23,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   return (
-    <main className="page-container py-12 sm:py-16">
+    <div className="page-container py-12 sm:py-16">
       <Link
         href="/"
-        className="text-muted-foreground hover:text-primary inline-flex items-center gap-2 text-sm font-medium transition-colors"
+        className="text-muted-foreground hover:text-primary focus-visible:ring-ring inline-flex items-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         <ArrowLeft aria-hidden="true" className="size-4" />
         Volver al inicio
@@ -51,6 +51,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           Los negocios de esta categoría aparecerán aquí en una próxima etapa.
         </p>
       </section>
-    </main>
+    </div>
   );
 }

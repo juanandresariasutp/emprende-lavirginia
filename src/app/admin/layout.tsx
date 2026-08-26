@@ -68,7 +68,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
         </div>
       </aside>
 
-      <main className="min-w-0">{children}</main>
+      <div className="min-w-0">{children}</div>
     </div>
   );
 }

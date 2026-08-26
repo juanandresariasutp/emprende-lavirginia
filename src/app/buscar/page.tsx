@@ -124,7 +124,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   return (
-    <main className="page-container py-12 sm:py-16">
+    <div className="page-container py-12 sm:py-16">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-primary text-sm font-semibold tracking-wide uppercase">
           Directorio local
@@ -178,7 +178,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               type="search"
               defaultValue={query}
               maxLength={100}
-              autoFocus
               autoComplete="off"
               placeholder="Ej. panadería, almuerzos o reparación"
               className="text-foreground placeholder:text-muted-foreground focus:ring-ring/30 h-12 w-full rounded-xl bg-transparent pr-4 pl-11 outline-none focus:ring-3"
@@ -257,6 +256,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           comenzar.
         </p>
       )}
-    </main>
+    </div>
   );
 }

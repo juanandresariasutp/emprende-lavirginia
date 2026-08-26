@@ -214,6 +214,7 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
       </div>
       <div
         ref={containerRef}
+        role="region"
         aria-label="Mapa de negocios de La Virginia"
         className="h-[24rem] w-full rounded-2xl sm:h-[32rem]"
       />
@@ -240,7 +241,7 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
               <li key={business.id}>
                 <Link
                   href={`/negocios/${business.slug}`}
-                  className="border-border hover:border-primary/40 hover:bg-muted/40 group flex h-full items-center gap-3 rounded-xl border p-4 transition-colors"
+                  className="border-border hover:border-primary/40 hover:bg-muted/40 focus-visible:ring-ring group flex h-full items-center gap-3 rounded-xl border p-4 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                   <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-lg">
                     <MapPin aria-hidden="true" className="size-5" />

@@ -19,7 +19,7 @@ export function BusinessCard({ business }: BusinessCardProps) {
     <Link
       href={`/negocios/${business.slug}`}
       aria-label={`Ver perfil de ${business.name}`}
-      className="border-border bg-card hover:border-primary/35 hover:shadow-primary/5 group flex h-full flex-col overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+      className="border-border bg-card hover:border-primary/35 hover:shadow-primary/5 focus-visible:ring-ring group flex h-full flex-col overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
     >
       <div className="from-primary/10 to-accent/35 relative flex h-32 items-center justify-center bg-gradient-to-br">
         {business.logoUrl ? (

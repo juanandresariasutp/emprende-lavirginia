@@ -1359,12 +1359,12 @@ style: mejorar experiencia responsive
 
 ## 17.2 Accesibilidad básica
 
-- [ ] Labels.
-- [ ] Alt text.
-- [ ] Navegación con teclado.
-- [ ] Contraste.
-- [ ] Focus states.
-- [ ] Botones semánticos.
+- [x] Labels.
+- [x] Alt text.
+- [x] Navegación con teclado.
+- [x] Contraste.
+- [x] Focus states.
+- [x] Botones semánticos.
 
 ### Commit
 

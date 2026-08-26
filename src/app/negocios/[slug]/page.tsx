@@ -220,7 +220,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
   };
 
   return (
-    <main className="pb-16 sm:pb-20">
+    <div className="pb-16 sm:pb-20">
       <BusinessProfileView businessId={business.id} />
       <section className="relative h-56 overflow-hidden bg-gradient-to-br from-primary/20 via-accent/30 to-secondary sm:h-72 lg:h-80">
         {cover ? (
@@ -537,6 +537,6 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
           </aside>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
