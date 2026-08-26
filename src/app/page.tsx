@@ -17,6 +17,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 import {
   ActivePromotions,
@@ -28,6 +29,10 @@ import { buttonVariants } from "@/components/ui/button";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const categoryIcons: Record<string, LucideIcon> = {
   "comida-bebidas": Utensils,

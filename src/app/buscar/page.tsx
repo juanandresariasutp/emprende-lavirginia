@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   title: "Buscar",
   description:
     "Busca negocios, productos, servicios y categorías de La Virginia.",
+  alternates: { canonical: "/buscar" },
 };
 
 type SearchPageProps = {

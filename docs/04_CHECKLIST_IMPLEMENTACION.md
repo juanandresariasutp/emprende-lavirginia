@@ -1405,7 +1405,7 @@ feat(seo): configurar robots del sitio
 
 ## 18.3 URLs canónicas
 
-- [ ] Configurar canonical cuando sea necesario.
+- [x] Configurar canonical cuando sea necesario.
 
 ### Commit
 

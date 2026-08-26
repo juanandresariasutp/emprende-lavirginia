@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { getSiteUrl } from "@/config/supabase";
 
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
@@ -18,6 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   applicationName: "Emprende La Virginia",
   title: {
     default: "Emprende La Virginia",

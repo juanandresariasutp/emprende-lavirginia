@@ -85,6 +85,7 @@ export async function generateMetadata({
   return {
     title: business.name,
     description,
+    alternates: { canonical: `/negocios/${slug}` },
     openGraph: {
       type: "website",
       locale: "es_CO",

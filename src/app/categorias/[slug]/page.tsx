@@ -1,4 +1,5 @@
 import { ArrowLeft, Store } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -7,6 +8,16 @@ import { createClient } from "@/lib/supabase/server";
 type CategoryPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({
+  params,
+}: CategoryPageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  return {
+    alternates: { canonical: `/categorias/${slug}` },
+  };
+}
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;

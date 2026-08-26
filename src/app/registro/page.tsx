@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Crear cuenta",
   description:
     "Crea una cuenta de propietario para registrar tu negocio en Emprende La Virginia.",
+  alternates: { canonical: "/registro" },
 };
 
 const benefits = [

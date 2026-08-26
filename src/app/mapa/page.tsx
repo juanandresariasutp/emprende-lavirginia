@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = {
   title: "Mapa de negocios",
   description: "Explora en el mapa los negocios de La Virginia, Risaralda.",
+  alternates: { canonical: "/mapa" },
 };
 
 export default async function MapPage() {
