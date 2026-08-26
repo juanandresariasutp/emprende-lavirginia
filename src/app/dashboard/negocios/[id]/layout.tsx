@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   CalendarClock,
   Megaphone,
   Package,
@@ -60,6 +61,11 @@ export default async function BusinessLayout({
       href: `/dashboard/negocios/${id}/promociones`,
       label: "Promociones",
       icon: Megaphone,
+    },
+    {
+      href: `/dashboard/negocios/${id}/estadisticas`,
+      label: "Estadísticas",
+      icon: BarChart3,
     },
   ];
 

@@ -1260,8 +1260,8 @@ feat(admin): crear gestión de categorías
 
 ## 15.1 Registrar visitas
 
-- [ ] Registrar `profile_view`.
-- [ ] Evitar contar eventos claramente duplicados si se decide.
+- [x] Registrar `profile_view`.
+- [x] Evitar contar eventos claramente duplicados si se decide.
 
 ### Commit
 
@@ -1275,11 +1275,11 @@ feat(analytics): registrar visitas de negocios
 
 Eventos:
 
-- [ ] WhatsApp.
-- [ ] Ubicación.
-- [ ] Instagram.
-- [ ] Producto.
-- [ ] Promoción.
+- [x] WhatsApp.
+- [x] Ubicación.
+- [x] Instagram.
+- [x] Producto.
+- [x] Promoción.
 
 ### Commit
 
@@ -1293,10 +1293,10 @@ feat(analytics): registrar interacciones del visitante
 
 Mostrar:
 
-- [ ] Visitas.
-- [ ] Clics en WhatsApp.
-- [ ] Productos más vistos.
-- [ ] Promociones más vistas.
+- [x] Visitas.
+- [x] Clics en WhatsApp.
+- [x] Productos más vistos.
+- [x] Promociones más vistas.
 
 ### Commit
 
