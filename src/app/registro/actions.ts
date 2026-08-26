@@ -1,17 +1,26 @@
 "use server";
 
+import { randomUUID } from "node:crypto";
+
 import { createClient } from "@/lib/supabase/server";
 import { getSiteUrl } from "@/config/supabase";
+import { verifyTurnstileToken } from "@/lib/security/turnstile";
 
 export type RegisterOwnerState = {
   status: "idle" | "error" | "success";
   message: string;
   fieldErrors?: Partial<
     Record<
-      "fullName" | "email" | "password" | "confirmPassword" | "terms",
+      | "fullName"
+      | "email"
+      | "password"
+      | "confirmPassword"
+      | "terms"
+      | "turnstile",
       string
     >
   >;
+  turnstileResetKey?: string;
 };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,6 +62,24 @@ export async function registerOwner(
     };
   }
 
+  const turnstileToken = String(formData.get("turnstileToken") ?? "");
+  const verification = await verifyTurnstileToken(turnstileToken, "register");
+  if (!verification.success) {
+    const configurationError = verification.reason === "configuration";
+    return {
+      status: "error",
+      message: configurationError
+        ? "La verificación de seguridad no está configurada."
+        : "No fue posible verificar que eres una persona.",
+      fieldErrors: {
+        turnstile: configurationError
+          ? "Contacta al administrador para completar la configuración."
+          : "Completa nuevamente la verificación de seguridad.",
+      },
+      turnstileResetKey: randomUUID(),
+    };
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
     email,
@@ -78,6 +105,7 @@ export async function registerOwner(
       message:
         messageByCode[error.code ?? ""] ??
         "No fue posible crear la cuenta. Inténtalo nuevamente.",
+      turnstileResetKey: randomUUID(),
     };
   }
 

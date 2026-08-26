@@ -3,6 +3,7 @@ import { Check, Store } from "lucide-react";
 import Link from "next/link";
 
 import { RegisterOwnerForm } from "@/components/forms/register-owner-form";
+import { getTurnstileSiteKey } from "@/lib/security/turnstile";
 
 export const metadata: Metadata = {
   title: "Crear cuenta",
@@ -17,6 +18,8 @@ const benefits = [
 ];
 
 export default function RegisterPage() {
+  const turnstileSiteKey = getTurnstileSiteKey();
+
   return (
     <section className="page-container flex flex-1 items-center py-10 sm:py-16">
       <div className="grid w-full overflow-hidden rounded-2xl border bg-card shadow-sm lg:grid-cols-[0.85fr_1.15fr]">
@@ -56,7 +59,7 @@ export default function RegisterPage() {
               Todos los campos son necesarios para comenzar.
             </p>
             <div className="mt-7">
-              <RegisterOwnerForm />
+              <RegisterOwnerForm siteKey={turnstileSiteKey} />
             </div>
             <p className="text-muted-foreground mt-6 text-center text-sm">
               ¿Ya tienes una cuenta?{" "}

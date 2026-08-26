@@ -1310,10 +1310,10 @@ feat(analytics): mostrar estadísticas al propietario
 
 ## 16.1 Configurar Turnstile
 
-- [ ] Crear widget.
-- [ ] Configurar site key.
-- [ ] Configurar secret en servidor.
-- [ ] Validar token en servidor.
+- [x] Crear widget.
+- [x] Configurar site key.
+- [x] Configurar secret en servidor.
+- [x] Validar token en servidor.
 
 ### Commit
 
@@ -1325,7 +1325,7 @@ feat(security): integrar cloudflare turnstile
 
 ## 16.2 Proteger registro
 
-- [ ] Agregar Turnstile al registro.
+- [x] Agregar Turnstile al registro.
 
 ### Commit
 

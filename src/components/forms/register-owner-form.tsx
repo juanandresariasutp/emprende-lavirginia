@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 import { registerOwner, type RegisterOwnerState } from "@/app/registro/actions";
 import { Button } from "@/components/ui/button";
+import { TurnstileWidget } from "@/components/forms/turnstile-widget";
 
 const inputClassName =
   "border-input bg-background text-foreground placeholder:text-muted-foreground focus:border-ring focus:ring-ring/30 h-11 w-full rounded-lg border px-3 text-sm outline-none transition-shadow focus:ring-3 disabled:cursor-not-allowed disabled:opacity-60";
@@ -13,7 +14,8 @@ const initialRegisterOwnerState: RegisterOwnerState = {
   message: "",
 };
 
-export function RegisterOwnerForm() {
+export function RegisterOwnerForm({ siteKey }: { siteKey: string | null }) {
+  const [turnstileReady, setTurnstileReady] = useState(false);
   const [state, formAction, pending] = useActionState(
     registerOwner,
     initialRegisterOwnerState,
@@ -183,6 +185,20 @@ export function RegisterOwnerForm() {
         ) : null}
       </div>
 
+      <div>
+        <TurnstileWidget
+          siteKey={siteKey}
+          action="register"
+          resetKey={state.turnstileResetKey ?? ""}
+          onTokenChange={setTurnstileReady}
+        />
+        {state.fieldErrors?.turnstile ? (
+          <p className="text-destructive mt-1.5 text-sm">
+            {state.fieldErrors.turnstile}
+          </p>
+        ) : null}
+      </div>
+
       {state.status === "error" && !state.fieldErrors ? (
         <p
           role="alert"
@@ -192,14 +208,16 @@ export function RegisterOwnerForm() {
         </p>
       ) : null}
 
-      <Button
-        type="submit"
-        size="lg"
-        className="h-11 w-full"
-        disabled={pending}
-      >
-        {pending ? "Creando cuenta…" : "Crear cuenta de propietario"}
-      </Button>
+      <fieldset disabled={pending || !turnstileReady}>
+        <Button
+          type="submit"
+          size="lg"
+          className="h-11 w-full"
+          disabled={pending || !turnstileReady}
+        >
+          {pending ? "Creando cuenta…" : "Crear cuenta de propietario"}
+        </Button>
+      </fieldset>
     </form>
   );
 }
