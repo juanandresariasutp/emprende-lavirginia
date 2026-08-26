@@ -1341,13 +1341,13 @@ feat(security): proteger registro con turnstile
 
 Revisar:
 
-- [ ] Home.
-- [ ] Búsqueda.
-- [ ] Perfil de negocio.
-- [ ] Dashboard.
-- [ ] Admin.
-- [ ] Formularios.
-- [ ] Mapa.
+- [x] Home.
+- [x] Búsqueda.
+- [x] Perfil de negocio.
+- [x] Dashboard.
+- [x] Admin.
+- [x] Formularios.
+- [x] Mapa.
 
 ### Commit
 

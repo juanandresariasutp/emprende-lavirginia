@@ -215,7 +215,7 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
       <div
         ref={containerRef}
         aria-label="Mapa de negocios de La Virginia"
-        className="h-[32rem] w-full rounded-2xl"
+        className="h-[24rem] w-full rounded-2xl sm:h-[32rem]"
       />
       <div className="border-border border-t p-3 sm:p-5">
         <div className="flex flex-wrap items-end justify-between gap-2">
