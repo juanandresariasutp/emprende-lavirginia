@@ -1,10 +1,4 @@
-import {
-  BadgePercent,
-  Clock3,
-  Search,
-  SlidersHorizontal,
-  Store,
-} from "lucide-react";
+import { Clock3, Search, SlidersHorizontal, Store } from "lucide-react";
 import type { Metadata } from "next";
 
 import {
@@ -29,7 +23,6 @@ type SearchPageProps = {
     q?: string | string[];
     categoria?: string | string[];
     abierto?: string | string[];
-    promociones?: string | string[];
   }>;
 };
 
@@ -53,9 +46,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const query = normalizeQuery(params.q);
   const categorySlug = normalizeSlug(params.categoria);
   const openNow = params.abierto === "ahora";
-  const hasPromotions = params.promociones === "activas";
-  const canSearch =
-    query.length >= 2 || categorySlug.length > 0 || openNow || hasPromotions;
+  const canSearch = query.length >= 2 || categorySlug.length > 0 || openNow;
   const supabase = await createClient();
   const { data: categories } = await supabase
     .from("categories")
@@ -70,7 +61,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       p_query: query,
       p_category_slug: categorySlug || null,
       p_open_now: openNow,
-      p_has_promotions: hasPromotions,
     });
     const matches = (data ?? []) as SearchMatch[];
     const businessIds = matches.map(({ business_id }) => business_id);
@@ -166,7 +156,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           Buscar
         </button>
 
-        <fieldset className="border-border grid min-w-0 gap-2 border-t pt-2 sm:grid-cols-3 lg:col-span-2">
+        <fieldset className="border-border grid min-w-0 gap-2 border-t pt-2 sm:grid-cols-2 lg:col-span-2">
           <legend className="sr-only">Filtros de búsqueda</legend>
           <label className="border-border text-foreground flex h-12 cursor-pointer items-center gap-2 rounded-xl border px-3 text-sm whitespace-nowrap">
             <input
@@ -178,17 +168,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             />
             <Clock3 aria-hidden="true" className="text-primary size-4" />
             Abierto ahora
-          </label>
-          <label className="border-border text-foreground flex h-12 cursor-pointer items-center gap-2 rounded-xl border px-3 text-sm whitespace-nowrap">
-            <input
-              type="checkbox"
-              name="promociones"
-              value="activas"
-              defaultChecked={hasPromotions}
-              className="accent-primary size-4"
-            />
-            <BadgePercent aria-hidden="true" className="text-primary size-4" />
-            Con promociones
           </label>
           <label className="relative">
             <span className="sr-only">Filtrar por categoría</span>

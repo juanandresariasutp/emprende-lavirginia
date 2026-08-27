@@ -4,7 +4,6 @@ import { parseBusinessForm } from "./business-form";
 import {
   parseLoginForm,
   parseProductForm,
-  parsePromotionForm,
   parseRegisterOwnerForm,
 } from "./form-validation";
 
@@ -112,40 +111,6 @@ describe("formulario de producto", () => {
     expect(result.fieldErrors).toMatchObject({
       name: expect.any(String),
       price: expect.any(String),
-    });
-  });
-});
-
-describe("formulario de promoción", () => {
-  it("convierte fechas locales de Colombia a ISO", () => {
-    const result = parsePromotionForm(
-      formData({
-        title: "Descuento especial",
-        startsAt: "2026-09-01T10:00",
-        endsAt: "2026-09-02T18:30",
-        isActive: "on",
-      }),
-    );
-
-    expect(result.fieldErrors).toEqual({});
-    expect(result.input.starts_at).toBe("2026-09-01T15:00:00.000Z");
-    expect(result.input.ends_at).toBe("2026-09-02T23:30:00.000Z");
-    expect(result.input.is_active).toBe(true);
-  });
-
-  it("rechaza URLs inválidas y fechas invertidas", () => {
-    const result = parsePromotionForm(
-      formData({
-        title: "Promoción",
-        imageUrl: "no-es-url",
-        startsAt: "2026-09-02T10:00",
-        endsAt: "2026-09-01T10:00",
-      }),
-    );
-
-    expect(result.fieldErrors).toMatchObject({
-      imageUrl: expect.any(String),
-      endsAt: expect.any(String),
     });
   });
 });

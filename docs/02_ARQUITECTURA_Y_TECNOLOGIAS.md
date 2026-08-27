@@ -1,5 +1,9 @@
 # 02 — Arquitectura y Selección de Tecnologías
 
+> **Arquitectura vigente (27 de agosto de 2026):** promociones fue retirado del
+> producto, las rutas, la búsqueda, la analítica y el esquema activo. Las
+> referencias posteriores documentan únicamente el diseño histórico descartado.
+
 ## Plataforma Comercial La Virginia
 
 Este documento define la arquitectura tecnológica inicial de la plataforma, el stack seleccionado y la estrategia de costos para el MVP.

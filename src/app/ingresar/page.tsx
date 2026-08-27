@@ -39,7 +39,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           </h1>
           <p className="mt-4 max-w-md leading-7 opacity-85">
             Ingresa para mantener actualizados tus productos, servicios,
-            promociones y datos de contacto.
+            productos, servicios y datos de contacto.
           </p>
         </div>
 

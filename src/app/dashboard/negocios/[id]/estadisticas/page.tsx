@@ -1,10 +1,4 @@
-import {
-  BadgePercent,
-  BarChart3,
-  Eye,
-  MessageCircle,
-  Package,
-} from "lucide-react";
+import { BarChart3, Eye, MessageCircle, Package } from "lucide-react";
 import type { Metadata } from "next";
 
 import { createClient } from "@/lib/supabase/server";
@@ -30,7 +24,7 @@ export default async function StatisticsPage({ params }: StatisticsPageProps) {
 
   const { data: events } = await supabase
     .from("business_events")
-    .select("event_type, product_id, promotion_id")
+    .select("event_type, product_id")
     .eq("business_id", id);
 
   const allEvents = events ?? [];
@@ -45,42 +39,18 @@ export default async function StatisticsPage({ params }: StatisticsPageProps) {
       .filter((event) => event.event_type === "product_view")
       .map((event) => event.product_id),
   );
-  const promotionRanking = rank(
-    allEvents
-      .filter((event) => event.event_type === "promotion_view")
-      .map((event) => event.promotion_id),
-  );
-
-  const [productsResult, promotionsResult] = await Promise.all([
-    productRanking.length
-      ? supabase
-          .from("products")
-          .select("id, name")
-          .eq("business_id", id)
-          .in(
-            "id",
-            productRanking.map(([productId]) => productId),
-          )
-      : Promise.resolve({ data: [] }),
-    promotionRanking.length
-      ? supabase
-          .from("promotions")
-          .select("id, title")
-          .eq("business_id", id)
-          .in(
-            "id",
-            promotionRanking.map(([promotionId]) => promotionId),
-          )
-      : Promise.resolve({ data: [] }),
-  ]);
+  const productsResult = productRanking.length
+    ? await supabase
+        .from("products")
+        .select("id, name")
+        .eq("business_id", id)
+        .in(
+          "id",
+          productRanking.map(([productId]) => productId),
+        )
+    : { data: [] };
   const productNames = new Map(
     (productsResult.data ?? []).map((product) => [product.id, product.name]),
-  );
-  const promotionNames = new Map(
-    (promotionsResult.data ?? []).map((promotion) => [
-      promotion.id,
-      promotion.title,
-    ]),
   );
 
   const summary = [
@@ -125,22 +95,13 @@ export default async function StatisticsPage({ params }: StatisticsPageProps) {
         })}
       </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+      <div className="mt-6 max-w-2xl">
         <Ranking
           title="Productos más vistos"
           icon={Package}
           rows={productRanking.map(([itemId, total]) => ({
             id: itemId,
             name: productNames.get(itemId) ?? "Producto eliminado",
-            total,
-          }))}
-        />
-        <Ranking
-          title="Promociones más vistas"
-          icon={BadgePercent}
-          rows={promotionRanking.map(([itemId, total]) => ({
-            id: itemId,
-            name: promotionNames.get(itemId) ?? "Promoción eliminada",
             total,
           }))}
         />

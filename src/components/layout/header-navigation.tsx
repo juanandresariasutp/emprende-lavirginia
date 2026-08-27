@@ -7,7 +7,6 @@ import {
   LogOut,
   Map,
   Menu,
-  Percent,
   ShieldCheck,
   Store,
   Tags,
@@ -28,7 +27,6 @@ const navigation = [
   { href: "/", label: "Inicio", icon: Home },
   { href: "/negocios", label: "Negocios", icon: Store },
   { href: "/categorias", label: "Categorías", icon: Tags },
-  { href: "/promociones", label: "Promociones", icon: Percent },
   { href: "/mapa", label: "Mapa", icon: Map },
 ];
 

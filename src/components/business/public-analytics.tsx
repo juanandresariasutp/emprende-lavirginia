@@ -11,7 +11,6 @@ type EventReference = {
   businessId: string;
   eventType: PublicEventType;
   productId?: string;
-  promotionId?: string;
 };
 
 export function BusinessProfileView({ businessId }: { businessId: string }) {
@@ -58,7 +57,7 @@ export function ViewedItem({
 }) {
   const elementRef = useRef<HTMLDivElement>(null);
   const recorded = useRef(false);
-  const { businessId, eventType, productId, promotionId } = event;
+  const { businessId, eventType, productId } = event;
 
   useEffect(() => {
     const element = elementRef.current;
@@ -71,7 +70,6 @@ export function ViewedItem({
           businessId,
           eventType,
           productId,
-          promotionId,
         });
         observer.disconnect();
       },
@@ -79,7 +77,7 @@ export function ViewedItem({
     );
     observer.observe(element);
     return () => observer.disconnect();
-  }, [businessId, eventType, productId, promotionId]);
+  }, [businessId, eventType, productId]);
 
   return <div ref={elementRef}>{children}</div>;
 }

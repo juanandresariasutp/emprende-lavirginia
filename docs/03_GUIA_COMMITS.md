@@ -1,5 +1,9 @@
 # Guía de Commits — Plataforma Comercial La Virginia
 
+> Los ejemplos históricos relacionados con promociones pertenecen al alcance
+> original y no deben implementarse. El módulo fue retirado el 27 de agosto de
+> 2026.
+
 Este documento define la convención de commits del proyecto para mantener un historial claro, ordenado y fácil de revisar.
 
 ## 1. Formato general

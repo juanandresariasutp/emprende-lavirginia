@@ -1,6 +1,4 @@
 import {
-  BadgePercent,
-  CalendarClock,
   Clock3,
   ExternalLink,
   ImageIcon,
@@ -32,7 +30,7 @@ import {
 import { getSiteUrl } from "@/config/supabase";
 import { buttonVariants } from "@/components/ui/button";
 import { isBusinessOpenNow } from "@/lib/business-hours";
-import { formatLongDate, formatTime12Hour } from "@/lib/formatters";
+import { formatTime12Hour } from "@/lib/formatters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +39,7 @@ type BusinessPageProps = {
 };
 
 const defaultSeoDescription =
-  "Conoce este negocio local, sus productos, servicios y promociones en Emprende La Virginia.";
+  "Conoce este negocio local, sus productos y servicios en Emprende La Virginia.";
 
 export async function generateMetadata({
   params,
@@ -142,8 +140,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
       business_hours(id, day_of_week, opens_at, closes_at, is_closed),
       business_categories(is_primary, categories(name, slug)),
       products(id, name, description, price, image_url, is_available),
-      services(id, name, description, price, is_available),
-      promotions(id, title, description, ends_at)
+      services(id, name, description, price, is_available)
     `,
     )
     .eq("slug", slug)
@@ -407,53 +404,6 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                 </div>
               ) : (
                 <EmptyContent message="Este negocio aún no ha publicado servicios." />
-              )}
-            </section>
-
-            <section>
-              <div className="mb-5 flex items-center gap-3">
-                <BadgePercent
-                  aria-hidden="true"
-                  className="text-primary size-5"
-                />
-                <h2 className="text-foreground text-2xl font-bold">
-                  Promociones
-                </h2>
-              </div>
-              {business.promotions.length > 0 ? (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {business.promotions.map((promotion) => (
-                    <ViewedItem
-                      key={promotion.id}
-                      event={{
-                        businessId: business.id,
-                        eventType: "promotion_view",
-                        promotionId: promotion.id,
-                      }}
-                    >
-                      <article className="bg-secondary/50 rounded-2xl border p-5">
-                        <h3 className="text-secondary-foreground font-semibold">
-                          {promotion.title}
-                        </h3>
-                        {promotion.description ? (
-                          <p className="text-muted-foreground mt-2 text-sm leading-6">
-                            {promotion.description}
-                          </p>
-                        ) : null}
-                        <p className="text-muted-foreground mt-4 flex items-center gap-2 text-xs">
-                          <CalendarClock
-                            aria-hidden="true"
-                            className="size-4"
-                          />
-                          Hasta el{" "}
-                          {formatLongDate(promotion.ends_at)}
-                        </p>
-                      </article>
-                    </ViewedItem>
-                  ))}
-                </div>
-              ) : (
-                <EmptyContent message="No hay promociones vigentes en este momento." />
               )}
             </section>
           </div>

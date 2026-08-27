@@ -149,29 +149,6 @@ where not exists (
   where services.business_id = businesses.id and services.name = seed.name
 );
 
-with seed (business_slug, title, description) as (
-  values
-    ('demo-cafe-rio-dulce', '2 cafés por precio especial', 'Promoción ficticia para demostrar el módulo de promociones.'),
-    ('demo-estudio-luna', 'Semana de renovación', 'Promoción ficticia con descuento en servicios seleccionados.'),
-    ('demo-conta-claro', 'Primera consulta con descuento', 'Promoción ficticia para nuevos emprendimientos.'),
-    ('demo-moda-cauce', 'Descuento en segunda prenda', 'Promoción ficticia en referencias seleccionadas.'),
-    ('demo-punto-digital-virginia', 'Accesorios al 15 %', 'Promoción ficticia por tiempo limitado.'),
-    ('demo-bienestar-vital', 'Sesión inicial especial', 'Promoción ficticia para nuevos usuarios.'),
-    ('demo-casa-y-color', 'Renueva tu espacio', 'Promoción ficticia en artículos decorativos.'),
-    ('demo-aula-abierta', 'Primera clase de prueba', 'Promoción educativa ficticia.')
-)
-insert into public.promotions (
-  business_id, title, description, starts_at, ends_at, is_active
-)
-select
-  businesses.id, seed.title, seed.description,
-  now() - interval '7 days', now() + interval '30 days', true
-from seed join public.businesses on businesses.slug = seed.business_slug
-where not exists (
-  select 1 from public.promotions
-  where promotions.business_id = businesses.id and promotions.title = seed.title
-);
-
 with seed (business_slug, storage_path, alt_text) as (
   values
     ('demo-cafe-rio-dulce', 'demo/demo-cafe-rio-dulce.jpg', 'Tres bebidas de café vistas desde arriba'),

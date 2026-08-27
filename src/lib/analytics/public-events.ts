@@ -5,8 +5,7 @@ export type PublicEventType =
   | "whatsapp_click"
   | "location_click"
   | "instagram_click"
-  | "product_view"
-  | "promotion_view";
+  | "product_view";
 
 const sessionKey = "elv_analytics_session_id";
 
@@ -26,12 +25,10 @@ export async function recordPublicEvent({
   businessId,
   eventType,
   productId,
-  promotionId,
 }: {
   businessId: string;
   eventType: PublicEventType;
   productId?: string;
-  promotionId?: string;
 }) {
   const supabase = createClient();
   await supabase.rpc("record_public_business_event", {
@@ -39,6 +36,5 @@ export async function recordPublicEvent({
     p_event_type: eventType,
     p_session_id: getSessionId(),
     p_product_id: productId ?? null,
-    p_promotion_id: promotionId ?? null,
   });
 }

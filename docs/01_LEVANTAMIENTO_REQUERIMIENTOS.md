@@ -1,5 +1,10 @@
 # 01 — Levantamiento de Requerimientos
 
+> **Decisión de producto (27 de agosto de 2026):** se retiró por completo el
+> módulo de promociones. La plataforma funciona como directorio informativo de
+> negocios, productos y servicios. Las menciones posteriores se conservan solo
+> como registro del alcance descartado y no representan funciones vigentes.
+
 ## Plataforma Comercial La Virginia
 
 ### 1. Descripción general

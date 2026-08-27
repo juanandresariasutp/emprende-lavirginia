@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  BadgePercent,
   GraduationCap,
   HeartPulse,
   House,
@@ -19,10 +18,6 @@ import {
 import Link from "next/link";
 import type { Metadata } from "next";
 
-import {
-  ActivePromotions,
-  type ActivePromotion,
-} from "@/components/home/active-promotions";
 import { RecentBusinesses } from "@/components/home/recent-businesses";
 import type { BusinessCardData } from "@/components/business/business-card";
 import { buttonVariants } from "@/components/ui/button";
@@ -54,10 +49,10 @@ const discoveryOptions = [
     description: "Encuentra comida, belleza, moda, tecnología y mucho más.",
   },
   {
-    href: "/promociones",
-    icon: BadgePercent,
-    title: "Aprovecha promociones",
-    description: "Descubre oportunidades vigentes en comercios de la zona.",
+    href: "/negocios",
+    icon: Store,
+    title: "Conoce negocios locales",
+    description: "Explora la información y oferta de comercios de la zona.",
   },
   {
     href: "/negocios?abierto=ahora",
@@ -69,28 +64,18 @@ const discoveryOptions = [
 
 export default async function Home() {
   const supabase = await createClient();
-  const now = new Date().toISOString();
-  const [{ data: categories }, { data: promotions }, { data: businesses }] =
-    await Promise.all([
-      supabase
-        .from("categories")
-        .select("id, name, slug, description")
-        .eq("is_active", true)
-        .order("sort_order", { ascending: true })
-        .order("name", { ascending: true })
-        .limit(8),
-      supabase
-        .from("promotions")
-        .select("id, title, description, ends_at, businesses(name, slug)")
-        .eq("is_active", true)
-        .lte("starts_at", now)
-        .gt("ends_at", now)
-        .order("ends_at", { ascending: true })
-        .limit(3),
-      supabase
-        .from("businesses")
-        .select(
-          `
+  const [{ data: categories }, { data: businesses }] = await Promise.all([
+    supabase
+      .from("categories")
+      .select("id, name, slug, description")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .order("name", { ascending: true })
+      .limit(8),
+    supabase
+      .from("businesses")
+      .select(
+        `
           id,
           name,
           slug,
@@ -99,11 +84,11 @@ export default async function Home() {
           business_images(storage_path, image_type),
           business_categories(is_primary, categories(name))
         `,
-        )
-        .eq("status", "approved")
-        .order("created_at", { ascending: false })
-        .limit(4),
-    ]);
+      )
+      .eq("status", "approved")
+      .order("created_at", { ascending: false })
+      .limit(4),
+  ]);
 
   return (
     <>
@@ -127,9 +112,9 @@ export default async function Home() {
               Todo lo local, más fácil de encontrar
             </h1>
             <p className="text-muted-foreground mt-5 max-w-2xl text-base leading-7 text-pretty sm:text-lg sm:leading-8">
-              Descubre negocios, productos, servicios y promociones de La
-              Virginia en un solo lugar. Compra cerca, conecta fácil y apoya a
-              quienes hacen crecer el municipio.
+              Descubre negocios, productos y servicios de La Virginia en un solo
+              lugar. Compra cerca, conecta fácil y apoya a quienes hacen crecer
+              el municipio.
             </p>
 
             <form
@@ -292,8 +277,8 @@ export default async function Home() {
               Encuentra una respuesta para cada necesidad
             </h2>
             <p className="text-muted-foreground mt-4 leading-7">
-              Empieza por una categoría, revisa las promociones disponibles o
-              consulta qué negocios están atendiendo ahora.
+              Empieza por una categoría, explora los negocios locales o consulta
+              cuáles están atendiendo ahora.
             </p>
           </div>
 
@@ -327,8 +312,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      <ActivePromotions promotions={(promotions ?? []) as ActivePromotion[]} />
 
       <RecentBusinesses
         businesses={(businesses ?? []).map((business) => {

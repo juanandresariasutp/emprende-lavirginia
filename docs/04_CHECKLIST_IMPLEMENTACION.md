@@ -1,5 +1,10 @@
 # 04 — Checklist de Implementación
 
+> **Cambio de alcance completado (27 de agosto de 2026):** promociones fue
+> retirado de navegación, páginas, formularios, búsqueda, perfiles, analítica,
+> datos de prueba y base de datos. Los ítems históricos posteriores quedan
+> anulados y no forman parte del producto vigente.
+
 ## Plataforma Comercial La Virginia
 
 Este documento será la guía principal para desarrollar la plataforma paso a paso con apoyo de Codex.

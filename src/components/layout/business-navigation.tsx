@@ -3,7 +3,6 @@
 import {
   BarChart3,
   CalendarClock,
-  Megaphone,
   Package,
   PencilLine,
   Wrench,
@@ -21,7 +20,6 @@ export function BusinessNavigation({ id, name }: { id: string; name: string }) {
     { href: `${basePath}/horarios`, label: "Horarios", icon: CalendarClock },
     { href: `${basePath}/productos`, label: "Productos", icon: Package },
     { href: `${basePath}/servicios`, label: "Servicios", icon: Wrench },
-    { href: `${basePath}/promociones`, label: "Promociones", icon: Megaphone },
     {
       href: `${basePath}/estadisticas`,
       label: "Estadísticas",

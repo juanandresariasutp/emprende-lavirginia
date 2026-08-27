@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const benefits = [
   "Publica la información de tu negocio.",
-  "Agrega productos, servicios y promociones.",
+  "Agrega productos y servicios.",
   "Mantén tus horarios y datos de contacto actualizados.",
 ];
 

@@ -4,7 +4,6 @@ import Link from "next/link";
 const platformLinks = [
   { href: "/negocios", label: "Explorar negocios" },
   { href: "/categorias", label: "Ver categorías" },
-  { href: "/promociones", label: "Promociones" },
 ];
 
 const businessLinks = [
