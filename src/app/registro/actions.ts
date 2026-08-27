@@ -4,6 +4,10 @@ import { randomUUID } from "node:crypto";
 
 import { createClient } from "@/lib/supabase/server";
 import { getSiteUrl } from "@/config/supabase";
+import {
+  parseRegisterOwnerForm,
+  type RegisterOwnerField,
+} from "@/lib/form-validation";
 import { verifyTurnstileToken } from "@/lib/security/turnstile";
 
 export type RegisterOwnerState = {
@@ -11,11 +15,7 @@ export type RegisterOwnerState = {
   message: string;
   fieldErrors?: Partial<
     Record<
-      | "fullName"
-      | "email"
-      | "password"
-      | "confirmPassword"
-      | "terms"
+      | RegisterOwnerField
       | "turnstile",
       string
     >
@@ -23,36 +23,11 @@ export type RegisterOwnerState = {
   turnstileResetKey?: string;
 };
 
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export async function registerOwner(
   _previousState: RegisterOwnerState,
   formData: FormData,
 ): Promise<RegisterOwnerState> {
-  const fullName = String(formData.get("fullName") ?? "").trim();
-  const email = String(formData.get("email") ?? "")
-    .trim()
-    .toLowerCase();
-  const password = String(formData.get("password") ?? "");
-  const confirmPassword = String(formData.get("confirmPassword") ?? "");
-  const acceptedTerms = formData.get("terms") === "on";
-  const fieldErrors: RegisterOwnerState["fieldErrors"] = {};
-
-  if (fullName.length < 2 || fullName.length > 120) {
-    fieldErrors.fullName = "Escribe un nombre de entre 2 y 120 caracteres.";
-  }
-  if (!emailPattern.test(email) || email.length > 254) {
-    fieldErrors.email = "Escribe un correo electrónico válido.";
-  }
-  if (password.length < 8 || password.length > 72) {
-    fieldErrors.password = "La contraseña debe tener entre 8 y 72 caracteres.";
-  }
-  if (password !== confirmPassword) {
-    fieldErrors.confirmPassword = "Las contraseñas no coinciden.";
-  }
-  if (!acceptedTerms) {
-    fieldErrors.terms = "Debes aceptar los términos para continuar.";
-  }
+  const { input, fieldErrors } = parseRegisterOwnerForm(formData);
 
   if (Object.keys(fieldErrors).length > 0) {
     return {
@@ -82,10 +57,10 @@ export async function registerOwner(
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
-    email,
-    password,
+    email: input.email,
+    password: input.password,
     options: {
-      data: { full_name: fullName },
+      data: { full_name: input.fullName },
       emailRedirectTo: `${getSiteUrl()}/auth/confirm?next=/dashboard`,
     },
   });

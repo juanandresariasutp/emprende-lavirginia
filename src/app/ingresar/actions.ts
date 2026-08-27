@@ -2,38 +2,20 @@
 
 import { redirect } from "next/navigation";
 
+import { parseLoginForm, type LoginField } from "@/lib/form-validation";
 import { createClient } from "@/lib/supabase/server";
 
 export type LoginState = {
   status: "idle" | "error";
   message: string;
-  fieldErrors?: Partial<Record<"email" | "password", string>>;
+  fieldErrors?: Partial<Record<LoginField, string>>;
 };
-
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function getSafeNextPath(value: FormDataEntryValue | null) {
-  const path = String(value ?? "");
-  return path.startsWith("/") && !path.startsWith("//") ? path : "/dashboard";
-}
 
 export async function login(
   _previousState: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
-  const email = String(formData.get("email") ?? "")
-    .trim()
-    .toLowerCase();
-  const password = String(formData.get("password") ?? "");
-  const nextPath = getSafeNextPath(formData.get("next"));
-  const fieldErrors: LoginState["fieldErrors"] = {};
-
-  if (!emailPattern.test(email) || email.length > 254) {
-    fieldErrors.email = "Escribe un correo electrónico válido.";
-  }
-  if (!password) {
-    fieldErrors.password = "Escribe tu contraseña.";
-  }
+  const { input, fieldErrors } = parseLoginForm(formData);
 
   if (Object.keys(fieldErrors).length > 0) {
     return {
@@ -44,7 +26,10 @@ export async function login(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await supabase.auth.signInWithPassword({
+    email: input.email,
+    password: input.password,
+  });
 
   if (error) {
     const messageByCode: Record<string, string> = {
@@ -63,5 +48,5 @@ export async function login(
     };
   }
 
-  redirect(nextPath);
+  redirect(input.nextPath);
 }

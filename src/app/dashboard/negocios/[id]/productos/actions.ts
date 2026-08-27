@@ -3,12 +3,13 @@
 import { revalidatePath } from "next/cache";
 import sharp from "sharp";
 
+import { parseProductForm, type ProductField } from "@/lib/form-validation";
 import { createClient } from "@/lib/supabase/server";
 
 export type ProductState = {
   status: "idle" | "error" | "success";
   message: string;
-  fieldErrors?: Partial<Record<"name" | "description" | "price", string>>;
+  fieldErrors?: Partial<Record<ProductField, string>>;
 };
 
 export type ProductImageState = {
@@ -21,37 +22,6 @@ const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const acceptedImageTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const productImageMaxBytes = 5 * 1024 * 1024;
-
-function parseProduct(formData: FormData) {
-  const name = String(formData.get("name") ?? "").trim();
-  const descriptionValue = String(formData.get("description") ?? "").trim();
-  const description = descriptionValue || null;
-  const priceText = String(formData.get("price") ?? "").trim();
-  const price = Number(priceText);
-  const isAvailable = formData.get("isAvailable") === "on";
-  const fieldErrors: ProductState["fieldErrors"] = {};
-
-  if (name.length < 2 || name.length > 120) {
-    fieldErrors.name = "Escribe un nombre de entre 2 y 120 caracteres.";
-  }
-  if (description && description.length > 2000) {
-    fieldErrors.description =
-      "La descripción no puede superar 2000 caracteres.";
-  }
-  if (
-    !priceText ||
-    !Number.isFinite(price) ||
-    price < 0 ||
-    price > 9_999_999_999.99
-  ) {
-    fieldErrors.price = "Escribe un precio válido igual o mayor que cero.";
-  }
-
-  return {
-    input: { name, description, price, is_available: isAvailable },
-    fieldErrors,
-  };
-}
 
 async function authenticatedClient() {
   const supabase = await createClient();
@@ -87,7 +57,7 @@ export async function createProduct(
   _previousState: ProductState,
   formData: FormData,
 ): Promise<ProductState> {
-  const { input, fieldErrors } = parseProduct(formData);
+  const { input, fieldErrors } = parseProductForm(formData);
   if (Object.keys(fieldErrors).length > 0) {
     return {
       status: "error",
@@ -115,7 +85,7 @@ export async function updateProduct(
   _previousState: ProductState,
   formData: FormData,
 ): Promise<ProductState> {
-  const { input, fieldErrors } = parseProduct(formData);
+  const { input, fieldErrors } = parseProductForm(formData);
   if (Object.keys(fieldErrors).length > 0) {
     return {
       status: "error",

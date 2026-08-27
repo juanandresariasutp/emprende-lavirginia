@@ -1434,11 +1434,11 @@ test: agregar pruebas de utilidades
 
 ## 19.2 Pruebas de formularios
 
-- [ ] Login.
-- [ ] Registro.
-- [ ] Negocio.
-- [ ] Producto.
-- [ ] Promoción.
+- [x] Login.
+- [x] Registro.
+- [x] Negocio.
+- [x] Producto.
+- [x] Promoción.
 
 ### Commit
 
