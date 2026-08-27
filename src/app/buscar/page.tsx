@@ -118,8 +118,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           };
         })
         .sort(
-          (a, b) =>
-            (relevance.get(b.id) ?? 0) - (relevance.get(a.id) ?? 0),
+          (a, b) => (relevance.get(b.id) ?? 0) - (relevance.get(a.id) ?? 0),
         );
     }
   }
@@ -136,16 +135,45 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <p className="text-muted-foreground mt-4 leading-7">
           Busca por negocio, producto, servicio o categoría.
         </p>
+      </div>
 
-        <form
-          action="/buscar"
-          method="get"
-          role="search"
-          className="border-border bg-card mt-7 grid gap-2 rounded-2xl border p-2 shadow-sm xl:grid-cols-[minmax(0,1fr)_auto_auto_auto_auto]"
+      <form
+        action="/buscar"
+        method="get"
+        role="search"
+        className="border-border bg-card mx-auto mt-7 grid max-w-5xl gap-2 rounded-2xl border p-2 shadow-sm lg:grid-cols-[minmax(0,1fr)_auto]"
+      >
+        <label htmlFor="directory-search" className="sr-only">
+          Buscar en el directorio
+        </label>
+        <div className="relative min-w-0">
+          <Search
+            aria-hidden="true"
+            className="text-muted-foreground absolute top-1/2 left-3.5 size-5 -translate-y-1/2"
+          />
+          <input
+            id="directory-search"
+            name="q"
+            type="search"
+            defaultValue={query}
+            maxLength={100}
+            autoComplete="off"
+            placeholder="Ej. panadería, almuerzos o reparación"
+            className="text-foreground placeholder:text-muted-foreground focus:ring-ring/30 h-12 w-full rounded-xl bg-transparent pr-4 pl-11 outline-none focus:ring-3"
+          />
+        </div>
+        <button
+          type="submit"
+          className={cn(
+            buttonVariants({ size: "lg" }),
+            "h-12 rounded-xl px-6 lg:min-w-28",
+          )}
         >
-          <label htmlFor="directory-search" className="sr-only">
-            Buscar en el directorio
-          </label>
+          Buscar
+        </button>
+
+        <fieldset className="border-border grid min-w-0 gap-2 border-t pt-2 sm:grid-cols-3 lg:col-span-2">
+          <legend className="sr-only">Filtros de búsqueda</legend>
           <label className="border-border text-foreground flex h-12 cursor-pointer items-center gap-2 rounded-xl border px-3 text-sm whitespace-nowrap">
             <input
               type="checkbox"
@@ -168,22 +196,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <BadgePercent aria-hidden="true" className="text-primary size-4" />
             Con promociones
           </label>
-          <div className="relative min-w-0 flex-1">
-            <Search
-              aria-hidden="true"
-              className="text-muted-foreground absolute top-1/2 left-3.5 size-5 -translate-y-1/2"
-            />
-            <input
-              id="directory-search"
-              name="q"
-              type="search"
-              defaultValue={query}
-              maxLength={100}
-              autoComplete="off"
-              placeholder="Ej. panadería, almuerzos o reparación"
-              className="text-foreground placeholder:text-muted-foreground focus:ring-ring/30 h-12 w-full rounded-xl bg-transparent pr-4 pl-11 outline-none focus:ring-3"
-            />
-          </div>
           <label className="relative">
             <span className="sr-only">Filtrar por categoría</span>
             <SlidersHorizontal
@@ -193,7 +205,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <select
               name="categoria"
               defaultValue={categorySlug}
-              className="border-border bg-background text-foreground focus:ring-ring/30 h-12 w-full appearance-none rounded-xl border pr-8 pl-9 text-sm outline-none focus:ring-3 sm:w-52"
+              className="border-border bg-background text-foreground focus:ring-ring/30 h-12 w-full appearance-none rounded-xl border pr-8 pl-9 text-sm outline-none focus:ring-3"
             >
               <option value="">Todas las categorías</option>
               {(categories ?? []).map((category) => (
@@ -203,14 +215,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               ))}
             </select>
           </label>
-          <button
-            type="submit"
-            className={cn(buttonVariants({ size: "lg" }), "h-12 rounded-xl")}
-          >
-            Buscar
-          </button>
-        </form>
-      </div>
+        </fieldset>
+      </form>
 
       {canSearch ? (
         <section className="mt-12" aria-labelledby="search-results-title">
