@@ -42,7 +42,7 @@ export async function Header() {
           aria-label="Emprende La Virginia, ir al inicio"
           className="focus-visible:ring-ring flex shrink-0 items-center gap-2.5 rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
-          <span className="bg-primary text-primary-foreground flex size-9 items-center justify-center rounded-xl shadow-sm">
+          <span className="from-primary to-brand-orange text-primary-foreground flex size-9 items-center justify-center rounded-xl bg-gradient-to-br shadow-md shadow-primary/20">
             <Store aria-hidden="true" className="size-5" strokeWidth={2.2} />
           </span>
           <span className="leading-tight">
