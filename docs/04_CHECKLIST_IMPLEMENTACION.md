@@ -841,6 +841,23 @@ feat(business): generar código qr del negocio
 
 ---
 
+## 8.6 Páginas públicas de exploración
+
+- [x] Crear listado de negocios aprobados.
+- [x] Crear listado de categorías activas.
+- [x] Mostrar negocios por categoría.
+- [x] Crear listado de promociones vigentes.
+- [x] Conectar enlaces del header, footer y Home.
+- [x] Incluir rutas públicas en sitemap y metadata canónica.
+
+### Commit
+
+```bash
+feat(public): crear páginas de exploración
+```
+
+---
+
 # 9. Catálogo
 
 ## 9.1 Mostrar productos
