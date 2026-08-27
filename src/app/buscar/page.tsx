@@ -12,6 +12,7 @@ import {
   type BusinessCardData,
 } from "@/components/business/business-card";
 import { buttonVariants } from "@/components/ui/button";
+import { getBusinessCardImages } from "@/lib/business-image";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -96,9 +97,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
       businesses = (businessRows ?? [])
         .map((business) => {
-          const logo = business.business_images.find(
-            (image) => image.image_type === "logo",
-          );
           const primaryCategory =
             business.business_categories.find((item) => item.is_primary) ??
             business.business_categories[0];
@@ -108,11 +106,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             name: business.name,
             slug: business.slug,
             address: business.address,
-            logoUrl: logo
-              ? supabase.storage
-                  .from("business-logos")
-                  .getPublicUrl(logo.storage_path).data.publicUrl
-              : null,
+            ...getBusinessCardImages(supabase, business.business_images),
             category: primaryCategory?.categories[0]?.name ?? null,
             isOpen: isBusinessOpenNow(business.business_hours),
           };

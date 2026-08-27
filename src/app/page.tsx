@@ -26,6 +26,7 @@ import {
 import { RecentBusinesses } from "@/components/home/recent-businesses";
 import type { BusinessCardData } from "@/components/business/business-card";
 import { buttonVariants } from "@/components/ui/button";
+import { getBusinessCardImages } from "@/lib/business-image";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -331,9 +332,6 @@ export default async function Home() {
 
       <RecentBusinesses
         businesses={(businesses ?? []).map((business) => {
-          const logo = business.business_images.find(
-            (image) => image.image_type === "logo",
-          );
           const primaryCategory = business.business_categories.find(
             (category) => category.is_primary,
           );
@@ -343,11 +341,7 @@ export default async function Home() {
             name: business.name,
             slug: business.slug,
             address: business.address,
-            logoUrl: logo
-              ? supabase.storage
-                  .from("business-logos")
-                  .getPublicUrl(logo.storage_path).data.publicUrl
-              : null,
+            ...getBusinessCardImages(supabase, business.business_images),
             category: primaryCategory?.categories[0]?.name ?? null,
             isOpen: isBusinessOpenNow(business.business_hours),
           } satisfies BusinessCardData;

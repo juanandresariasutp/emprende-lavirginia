@@ -171,3 +171,35 @@ where not exists (
   select 1 from public.promotions
   where promotions.business_id = businesses.id and promotions.title = seed.title
 );
+
+with seed (business_slug, storage_path, alt_text) as (
+  values
+    ('demo-cafe-rio-dulce', 'demo/demo-cafe-rio-dulce.jpg', 'Tres bebidas de café vistas desde arriba'),
+    ('demo-sabores-del-puente', 'demo/demo-sabores-del-puente.jpg', 'Interior de un restaurante'),
+    ('demo-panela-y-miga', 'demo/demo-panela-y-miga.jpg', 'Panes recién horneados'),
+    ('demo-estudio-luna', 'demo/demo-estudio-luna.jpg', 'Interior de un salón de belleza'),
+    ('demo-barberia-el-parque', 'demo/demo-barberia-el-parque.jpg', 'Servicio en una barbería'),
+    ('demo-esencia-spa-local', 'demo/demo-esencia-spa-local.jpg', 'Ambiente de spa y bienestar'),
+    ('demo-conta-claro', 'demo/demo-conta-claro.jpg', 'Reunión de trabajo con documentos'),
+    ('demo-impulso-creativo', 'demo/demo-impulso-creativo.jpg', 'Espacio de trabajo creativo'),
+    ('demo-moda-cauce', 'demo/demo-moda-cauce.jpg', 'Interior de una tienda de ropa'),
+    ('demo-accesorios-aurora', 'demo/demo-accesorios-aurora.jpg', 'Accesorios de joyería'),
+    ('demo-punto-digital-virginia', 'demo/demo-punto-digital-virginia.jpg', 'Dispositivos y accesorios tecnológicos'),
+    ('demo-tecno-soluciones-risaralda', 'demo/demo-tecno-soluciones-risaralda.jpg', 'Mantenimiento de un computador portátil'),
+    ('demo-bienestar-vital', 'demo/demo-bienestar-vital.jpg', 'Práctica de bienestar y relajación'),
+    ('demo-movimiento-saludable', 'demo/demo-movimiento-saludable.jpg', 'Zona de entrenamiento físico'),
+    ('demo-casa-y-color', 'demo/demo-casa-y-color.jpg', 'Sala con decoración contemporánea'),
+    ('demo-detalles-del-hogar', 'demo/demo-detalles-del-hogar.jpg', 'Interior de hogar decorado'),
+    ('demo-aula-abierta', 'demo/demo-aula-abierta.jpg', 'Salón de clases'),
+    ('demo-crece-academia', 'demo/demo-crece-academia.jpg', 'Grupo de estudiantes en formación')
+)
+insert into public.business_images (
+  business_id, storage_path, image_type, alt_text, sort_order
+)
+select businesses.id, seed.storage_path, 'cover', seed.alt_text, 0
+from seed
+join public.businesses on businesses.slug = seed.business_slug
+on conflict (business_id, storage_path) do update set
+  image_type = excluded.image_type,
+  alt_text = excluded.alt_text,
+  sort_order = excluded.sort_order;

@@ -7,6 +7,7 @@ import {
   type BusinessCardData,
 } from "@/components/business/business-card";
 import { buttonVariants } from "@/components/ui/button";
+import { getBusinessCardImages } from "@/lib/business-image";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
@@ -47,9 +48,6 @@ export default async function BusinessesPage({
 
   const businesses: BusinessCardData[] = (data ?? [])
     .map((business) => {
-      const logo = business.business_images.find(
-        (image) => image.image_type === "logo",
-      );
       const primaryCategory =
         business.business_categories.find((item) => item.is_primary) ??
         business.business_categories[0];
@@ -59,11 +57,7 @@ export default async function BusinessesPage({
         name: business.name,
         slug: business.slug,
         address: business.address,
-        logoUrl: logo
-          ? supabase.storage
-              .from("business-logos")
-              .getPublicUrl(logo.storage_path).data.publicUrl
-          : null,
+        ...getBusinessCardImages(supabase, business.business_images),
         category: primaryCategory?.categories[0]?.name ?? null,
         isOpen: isBusinessOpenNow(business.business_hours),
       };
@@ -116,7 +110,10 @@ export default async function BusinessesPage({
       </div>
 
       {error ? (
-        <p role="alert" className="text-destructive mt-8 rounded-2xl border p-6">
+        <p
+          role="alert"
+          className="text-destructive mt-8 rounded-2xl border p-6"
+        >
           No fue posible cargar los negocios. Intenta nuevamente.
         </p>
       ) : businesses.length > 0 ? (
@@ -129,7 +126,9 @@ export default async function BusinessesPage({
         <div className="border-border bg-card mt-8 rounded-2xl border border-dashed p-8 text-center">
           <Store aria-hidden="true" className="text-primary mx-auto size-10" />
           <h2 className="text-foreground mt-4 text-xl font-bold">
-            {openNow ? "No hay negocios abiertos ahora" : "Aún no hay negocios publicados"}
+            {openNow
+              ? "No hay negocios abiertos ahora"
+              : "Aún no hay negocios publicados"}
           </h2>
           <p className="text-muted-foreground mt-2 text-sm">
             {openNow

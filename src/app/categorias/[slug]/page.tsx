@@ -7,6 +7,7 @@ import {
   BusinessCard,
   type BusinessCardData,
 } from "@/components/business/business-card";
+import { getBusinessCardImages } from "@/lib/business-image";
 import { isBusinessOpenNow } from "@/lib/business-hours";
 import { createClient } from "@/lib/supabase/server";
 
@@ -58,9 +59,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   const businesses: BusinessCardData[] = (businessRows ?? []).map(
     (business) => {
-      const logo = business.business_images.find(
-        (image) => image.image_type === "logo",
-      );
       const primaryCategory =
         business.business_categories.find((item) => item.is_primary) ??
         business.business_categories[0];
@@ -70,11 +68,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         name: business.name,
         slug: business.slug,
         address: business.address,
-        logoUrl: logo
-          ? supabase.storage
-              .from("business-logos")
-              .getPublicUrl(logo.storage_path).data.publicUrl
-          : null,
+        ...getBusinessCardImages(supabase, business.business_images),
         category: primaryCategory?.categories[0]?.name ?? category.name,
         isOpen: isBusinessOpenNow(business.business_hours),
       };
@@ -117,12 +111,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             Negocios en {category.name}
           </h2>
           <span className="text-muted-foreground text-sm">
-            {businesses.length} {businesses.length === 1 ? "resultado" : "resultados"}
+            {businesses.length}{" "}
+            {businesses.length === 1 ? "resultado" : "resultados"}
           </span>
         </div>
 
         {businessesError ? (
-          <p role="alert" className="text-destructive mt-6 rounded-2xl border p-6">
+          <p
+            role="alert"
+            className="text-destructive mt-6 rounded-2xl border p-6"
+          >
             No fue posible cargar los negocios. Intenta nuevamente.
           </p>
         ) : businesses.length > 0 ? (

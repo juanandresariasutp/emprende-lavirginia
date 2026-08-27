@@ -7,6 +7,7 @@ export type BusinessCardData = {
   name: string;
   slug: string;
   logoUrl: string | null;
+  coverUrl: string | null;
   category: string | null;
   address: string | null;
   isOpen: boolean;
@@ -21,8 +22,16 @@ export function BusinessCard({ business }: BusinessCardProps) {
       aria-label={`Ver perfil de ${business.name}`}
       className="border-border bg-card hover:border-primary/35 hover:shadow-primary/5 focus-visible:ring-ring group flex h-full flex-col overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
     >
-      <div className="from-primary/10 to-accent/35 relative flex h-32 items-center justify-center bg-gradient-to-br">
-        {business.logoUrl ? (
+      <div className="from-primary/10 to-accent/35 relative flex h-40 items-center justify-center overflow-hidden bg-gradient-to-br">
+        {business.coverUrl ? (
+          <Image
+            src={business.coverUrl}
+            alt={`Imagen de ${business.name}`}
+            fill
+            sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+        ) : business.logoUrl ? (
           <Image
             src={business.logoUrl}
             alt={`Logo de ${business.name}`}
@@ -34,6 +43,9 @@ export function BusinessCard({ business }: BusinessCardProps) {
           <span className="bg-card text-primary flex size-20 items-center justify-center rounded-2xl border shadow-sm">
             <Store aria-hidden="true" className="size-9" />
           </span>
+        )}
+        {business.coverUrl && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
         )}
         <span
           className={`absolute top-4 right-4 rounded-full px-2.5 py-1 text-xs font-semibold ${business.isOpen ? "bg-emerald-100 text-emerald-800" : "bg-muted text-muted-foreground"}`}
