@@ -1,5 +1,7 @@
 import { BadgePercent, CalendarDays } from "lucide-react";
 
+import { formatShortDate } from "@/lib/formatters";
+
 export type ActivePromotion = {
   id: string;
   title: string;
@@ -11,11 +13,6 @@ export type ActivePromotion = {
 type ActivePromotionsProps = {
   promotions: ActivePromotion[];
 };
-
-const dateFormatter = new Intl.DateTimeFormat("es-CO", {
-  day: "numeric",
-  month: "long",
-});
 
 export function ActivePromotions({ promotions }: ActivePromotionsProps) {
   return (
@@ -61,7 +58,7 @@ export function ActivePromotions({ promotions }: ActivePromotionsProps) {
                   <p className="text-muted-foreground mt-5 flex items-center gap-2 border-t pt-4 text-sm">
                     <CalendarDays aria-hidden="true" className="size-4" />
                     Vigente hasta el{" "}
-                    {dateFormatter.format(new Date(promotion.ends_at))}
+                    {formatShortDate(promotion.ends_at)}
                   </p>
                 </div>
               </article>

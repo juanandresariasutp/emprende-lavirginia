@@ -32,6 +32,7 @@ import {
 import { getSiteUrl } from "@/config/supabase";
 import { buttonVariants } from "@/components/ui/button";
 import { isBusinessOpenNow } from "@/lib/business-hours";
+import { formatLongDate, formatTime12Hour } from "@/lib/formatters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
@@ -103,12 +104,6 @@ export async function generateMetadata({
   };
 }
 
-const promotionDateFormatter = new Intl.DateTimeFormat("es-CO", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
-
 const dayNames = [
   "Domingo",
   "Lunes",
@@ -118,13 +113,6 @@ const dayNames = [
   "Viernes",
   "Sábado",
 ];
-
-function formatTime(time: string) {
-  const [hours, minutes] = time.split(":").map(Number);
-  const suffix = hours >= 12 ? "p. m." : "a. m.";
-  const displayHours = hours % 12 || 12;
-  return `${displayHours}:${String(minutes).padStart(2, "0")} ${suffix}`;
-}
 
 function EmptyContent({ message }: { message: string }) {
   return (
@@ -458,9 +446,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                             className="size-4"
                           />
                           Hasta el{" "}
-                          {promotionDateFormatter.format(
-                            new Date(promotion.ends_at),
-                          )}
+                          {formatLongDate(promotion.ends_at)}
                         </p>
                       </article>
                     </ViewedItem>
@@ -493,7 +479,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                         !schedule.opens_at ||
                         !schedule.closes_at
                           ? "Cerrado"
-                          : `${formatTime(schedule.opens_at)} – ${formatTime(schedule.closes_at)}`}
+                          : `${formatTime12Hour(schedule.opens_at)} – ${formatTime12Hour(schedule.closes_at)}`}
                       </dd>
                     </div>
                   ))}

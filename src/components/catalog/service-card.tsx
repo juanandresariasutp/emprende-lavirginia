@@ -1,5 +1,7 @@
 import { CircleCheck, Wrench } from "lucide-react";
 
+import { formatCurrencyCop } from "@/lib/formatters";
+
 export type ServiceCardData = {
   id: string;
   name: string;
@@ -11,12 +13,6 @@ export type ServiceCardData = {
 type ServiceCardProps = {
   service: ServiceCardData;
 };
-
-const moneyFormatter = new Intl.NumberFormat("es-CO", {
-  style: "currency",
-  currency: "COP",
-  maximumFractionDigits: 0,
-});
 
 export function ServiceCard({ service }: ServiceCardProps) {
   return (
@@ -48,7 +44,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
       <p className="text-primary mt-auto pt-5 text-lg font-bold">
         {service.price === null
           ? "Consultar precio"
-          : moneyFormatter.format(Number(service.price))}
+          : formatCurrencyCop(service.price)}
       </p>
     </article>
   );

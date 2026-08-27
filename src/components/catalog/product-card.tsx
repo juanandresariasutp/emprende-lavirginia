@@ -1,6 +1,8 @@
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
 
+import { formatCurrencyCop } from "@/lib/formatters";
+
 export type ProductCardData = {
   id: string;
   name: string;
@@ -13,12 +15,6 @@ export type ProductCardData = {
 type ProductCardProps = {
   product: ProductCardData;
 };
-
-const moneyFormatter = new Intl.NumberFormat("es-CO", {
-  style: "currency",
-  currency: "COP",
-  maximumFractionDigits: 0,
-});
 
 export function ProductCard({ product }: ProductCardProps) {
   return (
@@ -58,7 +54,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </p>
         ) : null}
         <p className="text-primary mt-auto pt-4 text-lg font-bold">
-          {moneyFormatter.format(Number(product.price))}
+          {formatCurrencyCop(product.price)}
         </p>
       </div>
     </article>

@@ -1419,10 +1419,10 @@ feat(seo): configurar urls canónicas
 
 ## 19.1 Pruebas de utilidades
 
-- [ ] Horarios.
-- [ ] Formateadores.
-- [ ] Validaciones.
-- [ ] Distancias.
+- [x] Horarios.
+- [x] Formateadores.
+- [x] Validaciones.
+- [x] Distancias.
 
 ### Commit
 
