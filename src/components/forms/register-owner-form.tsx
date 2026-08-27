@@ -25,7 +25,7 @@ export function RegisterOwnerForm({ siteKey }: { siteKey: string | null }) {
     return (
       <div
         role="status"
-        className="border-primary/25 bg-primary/5 rounded-xl border p-5"
+        className="border-brand-orange/30 bg-accent rounded-xl border p-5"
       >
         <h2 className="text-foreground font-semibold">Revisa tu correo</h2>
         <p className="text-muted-foreground mt-2 text-sm leading-6">
@@ -169,7 +169,7 @@ export function RegisterOwnerForm({ siteKey }: { siteKey: string | null }) {
           <input
             name="terms"
             type="checkbox"
-            className="border-input text-primary focus:ring-ring mt-1 size-4 rounded border"
+            className="border-input accent-brand-orange focus:ring-brand-orange mt-1 size-4 rounded border"
             required
             disabled={pending}
           />
@@ -212,7 +212,7 @@ export function RegisterOwnerForm({ siteKey }: { siteKey: string | null }) {
         <Button
           type="submit"
           size="lg"
-          className="h-11 w-full"
+          className="from-brand-coral to-brand-orange text-brand-orange-foreground shadow-brand-orange/25 h-11 w-full bg-gradient-to-r font-bold hover:brightness-105 hover:shadow-lg hover:shadow-brand-orange/25 dark:hover:brightness-110"
           disabled={pending || !turnstileReady}
         >
           {pending ? "Creando cuenta…" : "Crear cuenta de propietario"}

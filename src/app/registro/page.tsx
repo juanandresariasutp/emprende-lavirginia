@@ -23,9 +23,13 @@ export default function RegisterPage() {
 
   return (
     <section className="page-container flex flex-1 items-center py-10 sm:py-16">
-      <div className="grid w-full overflow-hidden rounded-2xl border bg-card shadow-sm lg:grid-cols-[0.85fr_1.15fr]">
-        <div className="bg-primary text-primary-foreground p-7 sm:p-10 lg:p-12">
-          <span className="flex size-11 items-center justify-center rounded-xl bg-white/15">
+      <div className="border-brand-orange/20 shadow-brand-orange/10 grid w-full overflow-hidden rounded-2xl border bg-card shadow-xl lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="from-brand-coral to-brand-orange text-brand-orange-foreground relative isolate overflow-hidden bg-gradient-to-br p-7 sm:p-10 lg:p-12">
+          <span
+            aria-hidden="true"
+            className="absolute -top-20 -right-16 -z-10 size-64 rounded-full bg-white/20 blur-2xl"
+          />
+          <span className="flex size-11 items-center justify-center rounded-xl bg-black/10">
             <Store aria-hidden="true" className="size-6" />
           </span>
           <p className="mt-8 text-sm font-semibold tracking-wide uppercase opacity-80">

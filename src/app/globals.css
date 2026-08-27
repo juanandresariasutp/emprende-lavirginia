@@ -68,9 +68,9 @@
   --accent: oklch(0.92 0.065 62);
   --accent-foreground: oklch(0.32 0.085 42);
   --brand-orange: oklch(0.7 0.205 48);
-  --brand-orange-foreground: oklch(0.99 0.004 60);
+  --brand-orange-foreground: oklch(0.2 0.055 38);
   --brand-coral: oklch(0.66 0.2 25);
-  --brand-coral-foreground: oklch(0.99 0.004 30);
+  --brand-coral-foreground: oklch(0.2 0.055 25);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.89 0.025 252);
   --input: oklch(0.89 0.025 252);

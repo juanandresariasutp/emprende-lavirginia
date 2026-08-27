@@ -26,8 +26,12 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <section className="page-container flex flex-1 items-center py-10 sm:py-16">
-      <div className="mx-auto grid w-full max-w-5xl overflow-hidden rounded-2xl border bg-card shadow-sm lg:grid-cols-2">
-        <div className="bg-primary text-primary-foreground flex flex-col justify-center p-7 sm:p-10 lg:p-12">
+      <div className="border-primary/15 shadow-primary/10 mx-auto grid w-full max-w-5xl overflow-hidden rounded-2xl border bg-card shadow-xl lg:grid-cols-2">
+        <div className="from-primary via-primary to-primary/80 text-primary-foreground relative isolate flex flex-col justify-center overflow-hidden bg-gradient-to-br p-7 sm:p-10 lg:p-12">
+          <span
+            aria-hidden="true"
+            className="bg-brand-orange/25 absolute -right-16 -bottom-20 -z-10 size-64 rounded-full blur-2xl"
+          />
           <span className="flex size-11 items-center justify-center rounded-xl bg-white/15">
             <Store aria-hidden="true" className="size-6" />
           </span>
@@ -38,8 +42,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             Administra tu negocio desde un solo lugar
           </h1>
           <p className="mt-4 max-w-md leading-7 opacity-85">
-            Ingresa para mantener actualizados tus productos, servicios,
-            productos, servicios y datos de contacto.
+            Ingresa para mantener actualizados tus productos, servicios y datos
+            de contacto.
           </p>
         </div>
 
@@ -58,7 +62,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               ¿Aún no tienes una cuenta?{" "}
               <Link
                 href="/registro"
-                className="text-primary font-semibold hover:underline"
+                className="text-brand-coral dark:text-brand-orange font-semibold hover:underline"
               >
                 Regístrate
               </Link>
