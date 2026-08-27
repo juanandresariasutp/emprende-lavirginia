@@ -1,16 +1,7 @@
-import { Building2, LayoutDashboard, PlusCircle } from "lucide-react";
-import Link from "next/link";
+import { Building2 } from "lucide-react";
 
 import { LogoutButton } from "@/components/forms/logout-button";
-
-const dashboardNavigation = [
-  { href: "/dashboard", label: "Resumen", icon: LayoutDashboard },
-  {
-    href: "/dashboard/negocios/nuevo",
-    label: "Crear negocio",
-    icon: PlusCircle,
-  },
-];
+import { RoleNavigation } from "@/components/layout/role-navigation";
 
 export default function DashboardLayout({
   children,
@@ -30,24 +21,7 @@ export default function DashboardLayout({
           </div>
         </div>
 
-        <nav
-          aria-label="Navegación del panel"
-          className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:grid lg:gap-1 lg:overflow-visible lg:pb-0"
-        >
-          {dashboardNavigation.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
-              >
-                <Icon aria-hidden="true" className="size-4" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <RoleNavigation variant="owner" />
 
         <div className="border-border mt-4 border-t pt-4">
           <LogoutButton />

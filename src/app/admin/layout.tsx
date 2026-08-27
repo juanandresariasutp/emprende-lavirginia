@@ -1,15 +1,9 @@
-import { Building2, LayoutDashboard, ShieldCheck, Tags } from "lucide-react";
-import Link from "next/link";
+import { ShieldCheck } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { LogoutButton } from "@/components/forms/logout-button";
+import { RoleNavigation } from "@/components/layout/role-navigation";
 import { createClient } from "@/lib/supabase/server";
-
-const adminNavigation = [
-  { href: "/admin", label: "Resumen", icon: LayoutDashboard },
-  { href: "/admin/negocios", label: "Negocios pendientes", icon: Building2 },
-  { href: "/admin/categorias", label: "Categorías", icon: Tags },
-];
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   const supabase = await createClient();
@@ -44,24 +38,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
           </div>
         </div>
 
-        <nav
-          aria-label="Navegación administrativa"
-          className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:grid lg:gap-1 lg:overflow-visible lg:pb-0"
-        >
-          {adminNavigation.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
-              >
-                <Icon aria-hidden="true" className="size-4" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <RoleNavigation variant="admin" />
 
         <div className="border-border mt-4 border-t pt-4">
           <LogoutButton />
