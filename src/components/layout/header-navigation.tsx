@@ -15,6 +15,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { logout } from "@/app/dashboard/actions";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -154,6 +155,7 @@ export function HeaderNavigation({ viewer }: { viewer: HeaderViewer }) {
       </nav>
 
       <div className="hidden items-center gap-2 md:flex">
+        <ThemeToggle />
         <AccountActions viewer={viewer} />
       </div>
 
@@ -173,6 +175,7 @@ export function HeaderNavigation({ viewer }: { viewer: HeaderViewer }) {
           </nav>
 
           <div className="border-border mt-2 grid gap-2 border-t pt-3">
+            <ThemeToggle mobile />
             <AccountActions viewer={viewer} mobile />
           </div>
         </div>

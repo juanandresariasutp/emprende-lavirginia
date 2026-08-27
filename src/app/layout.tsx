@@ -57,8 +57,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es-CO"
       data-scroll-behavior="smooth"
+      suppressHydrationWarning
       className={`${poppins.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("emprende-theme");var d=t? t==="dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d);document.documentElement.style.colorScheme=d?"dark":"light"}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col">
         <a
           href="#contenido-principal"

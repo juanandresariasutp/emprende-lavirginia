@@ -32,7 +32,7 @@ export function Footer() {
               aria-label="Emprende La Virginia, ir al inicio"
               className="focus-visible:ring-ring inline-flex items-center gap-2.5 rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
-              <span className="from-primary to-brand-orange text-primary-foreground flex size-9 items-center justify-center rounded-xl bg-gradient-to-br">
+              <span className="from-primary via-brand-coral to-brand-orange text-primary-foreground flex size-9 items-center justify-center rounded-xl bg-gradient-to-br">
                 <Store aria-hidden="true" className="size-5" />
               </span>
               <span className="text-foreground font-bold">
